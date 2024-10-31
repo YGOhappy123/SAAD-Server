@@ -216,5 +216,15 @@ Thanks to the following people for contributing to this project ✨:
                 <sub><b>Nguyen1609</b></sub>
             </a>
         </td>
+        <td align="center">
+            <a href="https://github.com/ryuus3igun">
+                <img 
+                    src="https://avatars.githubusercontent.com/u/126484739?v=4"
+                    alt="ryuus3igun" width="100px;" height="100px;"
+                    style="border-radius: 4px; background: #fff;"
+                /><br />
+                <sub><b>ryuus3igun</b></sub>
+            </a>
+        </td>
     </tr>
 </table>
