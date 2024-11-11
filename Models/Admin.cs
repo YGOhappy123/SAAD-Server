@@ -12,6 +12,5 @@ namespace milktea_server.Models
         public int? CreatedById { get; set; }
         public Admin? CreatedBy { get; set; }
         public List<Admin> CreatedAdmins { get; set; } = [];
-        public List<Staff> CreatedStaffs { get; set; } = [];
     }
 }
