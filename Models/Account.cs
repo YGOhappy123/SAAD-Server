@@ -12,7 +12,7 @@ namespace milktea_server.Models
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public UserRole Role { get; set; } = UserRole.Customer;
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public Customer? Customer { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using milktea_server.Data;
 namespace milktea_server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241111022605_InitTables")]
+    [Migration("20241121103210_InitTables")]
     partial class InitTables
     {
         /// <inheritdoc />
