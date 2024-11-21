@@ -22,8 +22,6 @@ namespace milktea_server.Models
         public Customer? Customer { get; set; }
         public int? ProcessingStaffId { get; set; }
         public Admin? ProcessingStaff { get; set; }
-        public int? VoucherId { get; set; }
-        public Voucher? Voucher { get; set; }
         public List<OrderItem> Items { get; set; } = [];
     }
 }

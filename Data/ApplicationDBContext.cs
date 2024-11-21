@@ -18,7 +18,6 @@ namespace milktea_server.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Milktea> Milkteas { get; set; }
         public DbSet<Topping> Toppings { get; set; }
-        public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderItemTopping> OrderItemToppings { get; set; }
@@ -29,7 +28,6 @@ namespace milktea_server.Data
         {
             modelBuilder.Entity<Account>().Property(acc => acc.Role).HasConversion<string>();
             modelBuilder.Entity<Admin>().Property(ad => ad.Gender).HasConversion<string>();
-            modelBuilder.Entity<Voucher>().Property(vc => vc.DiscountType).HasConversion<string>();
             modelBuilder.Entity<Order>().Property(od => od.Status).HasConversion<string>();
             modelBuilder.Entity<OrderItem>().Property(odi => odi.Size).HasConversion<string>();
             modelBuilder.Entity<CartItem>().Property(ci => ci.Size).HasConversion<string>();
