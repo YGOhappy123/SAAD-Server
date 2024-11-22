@@ -94,6 +94,7 @@ namespace milktea_server.Services
                     FirstName = signUpDto.FirstName,
                     LastName = signUpDto.LastName,
                     AccountId = newAccount.Id,
+                    Avatar = _configuration["Application:DefaultUserAvatar"],
                 };
 
                 await _customerRepo.AddCustomer(newCustomer);

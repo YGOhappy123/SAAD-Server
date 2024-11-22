@@ -12,7 +12,7 @@ using milktea_server.Data;
 namespace milktea_server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241122104240_InitTables")]
+    [Migration("20241122124012_InitTables")]
     partial class InitTables
     {
         /// <inheritdoc />
@@ -480,7 +480,7 @@ namespace milktea_server.Data.Migrations
             modelBuilder.Entity("milktea_server.Models.Milktea", b =>
                 {
                     b.HasOne("milktea_server.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Milkteas")
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
@@ -544,6 +544,11 @@ namespace milktea_server.Data.Migrations
             modelBuilder.Entity("milktea_server.Models.CartItem", b =>
                 {
                     b.Navigation("Toppings");
+                });
+
+            modelBuilder.Entity("milktea_server.Models.Category", b =>
+                {
+                    b.Navigation("Milkteas");
                 });
 
             modelBuilder.Entity("milktea_server.Models.Order", b =>
