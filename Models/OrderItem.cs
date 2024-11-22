@@ -13,7 +13,7 @@ namespace milktea_server.Models
         public int Quantity { get; set; } = 1;
         public MilkteaSize Size { get; set; } = MilkteaSize.S;
 
-        [Column(TypeName = "decimal(6,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
         public int? OrderId { get; set; }
         public Order? Order { get; set; }

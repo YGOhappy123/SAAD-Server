@@ -49,7 +49,7 @@ namespace milktea_server.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     NameVi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionVi = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -62,25 +62,6 @@ namespace milktea_server.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Toppings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vouchers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiscountType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
-                    UsageLimit = table.Column<int>(type: "int", nullable: true),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vouchers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,9 +126,9 @@ namespace milktea_server.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PriceS = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    PriceM = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    PriceL = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    PriceS = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    PriceM = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    PriceL = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
                     NameVi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -174,15 +155,14 @@ namespace milktea_server.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPrice = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RejectionReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
-                    ProcessingStaffId = table.Column<int>(type: "int", nullable: true),
-                    VoucherId = table.Column<int>(type: "int", nullable: true)
+                    ProcessingStaffId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -196,11 +176,6 @@ namespace milktea_server.Data.Migrations
                         name: "FK_Orders_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Orders_Vouchers_VoucherId",
-                        column: x => x.VoucherId,
-                        principalTable: "Vouchers",
                         principalColumn: "Id");
                 });
 
@@ -238,7 +213,7 @@ namespace milktea_server.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: true),
                     MilkteaId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -287,7 +262,7 @@ namespace milktea_server.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     ToppingId = table.Column<int>(type: "int", nullable: true),
                     OrderItemId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -377,11 +352,6 @@ namespace milktea_server.Data.Migrations
                 name: "IX_Orders_ProcessingStaffId",
                 table: "Orders",
                 column: "ProcessingStaffId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_VoucherId",
-                table: "Orders",
-                column: "VoucherId");
         }
 
         /// <inheritdoc />
@@ -416,9 +386,6 @@ namespace milktea_server.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

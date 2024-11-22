@@ -8,7 +8,7 @@ namespace milktea_server.Models
 {
     public class Topping : Product
     {
-        [Column(TypeName = "decimal(6,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
     }
 }

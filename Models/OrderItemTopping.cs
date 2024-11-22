@@ -10,7 +10,7 @@ namespace milktea_server.Models
     {
         public int Id { get; set; }
 
-        [Column(TypeName = "decimal(6,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
         public int? ToppingId { get; set; }
         public Topping? Topping { get; set; }

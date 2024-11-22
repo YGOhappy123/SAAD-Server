@@ -12,8 +12,8 @@ using milktea_server.Data;
 namespace milktea_server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241121130905_RemoveVoucherFeature")]
-    partial class RemoveVoucherFeature
+    [Migration("20241122104240_InitTables")]
+    partial class InitTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,14 +262,14 @@ namespace milktea_server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("PriceL")
-                        .HasColumnType("decimal(6,2)");
+                    b.Property<decimal?>("PriceL")
+                        .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal>("PriceM")
-                        .HasColumnType("decimal(6,2)");
+                    b.Property<decimal?>("PriceM")
+                        .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal>("PriceS")
-                        .HasColumnType("decimal(6,2)");
+                    b.Property<decimal?>("PriceS")
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
@@ -306,7 +306,7 @@ namespace milktea_server.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(8,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -335,7 +335,7 @@ namespace milktea_server.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -365,7 +365,7 @@ namespace milktea_server.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int?>("ToppingId")
                         .HasColumnType("int");
@@ -416,7 +416,7 @@ namespace milktea_server.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 

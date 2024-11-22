@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace milktea_server.Models
+namespace milktea_server.Dtos.Product
 {
-    public class Category
+    public class CategoryDto
     {
         public int Id { get; set; }
         public string NameVi { get; set; } = string.Empty;
         public string NameEn { get; set; } = string.Empty;
-        public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public List<Milktea> Milkteas { get; set; } = [];
+        public bool? IsActive { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

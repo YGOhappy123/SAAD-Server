@@ -20,23 +20,23 @@ namespace milktea_server.Repositories
 
         public async Task<Customer?> GetCustomerById(int customerId)
         {
-            return await _dbContext.Customers.SingleOrDefaultAsync(g => g.Id == customerId);
+            return await _dbContext.Customers.SingleOrDefaultAsync(c => c.Id == customerId);
         }
 
         public async Task<Customer?> GetCustomerByAccountId(int accountId)
         {
-            return await _dbContext.Customers.SingleOrDefaultAsync(g => g.AccountId == accountId);
+            return await _dbContext.Customers.SingleOrDefaultAsync(c => c.AccountId == accountId);
         }
 
         public async Task<Customer?> GetCustomerByEmail(string email, bool isAccountIncluded)
         {
             if (isAccountIncluded)
             {
-                return await _dbContext.Customers.Include(g => g.Account).SingleOrDefaultAsync(g => g.Email == email);
+                return await _dbContext.Customers.Include(c => c.Account).SingleOrDefaultAsync(c => c.Email == email);
             }
             else
             {
-                return await _dbContext.Customers.SingleOrDefaultAsync(g => g.Email == email);
+                return await _dbContext.Customers.SingleOrDefaultAsync(c => c.Email == email);
             }
         }
 

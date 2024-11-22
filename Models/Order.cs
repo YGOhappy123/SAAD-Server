@@ -11,7 +11,7 @@ namespace milktea_server.Models
     {
         public int Id { get; set; }
 
-        [Column(TypeName = "decimal(8,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal TotalPrice { get; set; }
         public string? Note { get; set; }
         public string? RejectionReason { get; set; }
