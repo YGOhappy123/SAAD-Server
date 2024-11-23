@@ -1,121 +1,121 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-        PMT | {{#if (eq Locale "vi")}}Đăng ký tài khoản thành công{{else}}Account registration success{{/if}}
-    </title>
-    <style>
-        body {
-            position: relative;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 700px;
-            height: 100%;
-            padding: 35px;
-            border-radius: 5px;
-            background-color: #222831;
-            color: #fff;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            PMT | {{#if (eq Locale "vi")}}Đăng ký tài khoản thành công{{else}}Account registration success{{/if}}
+        </title>
+        <style>
+            body {
+                position: relative;
+                height: 100vh;
+                margin: 0;
+                text-align: center;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: 700px;
+                height: 100%;
+                padding: 35px;
+                border-radius: 5px;
+                background-color: #222831;
+                color: #fff;
+            }
 
-        .card {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            transform: translate(-50%, -50%);
-        }
+            .card {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100%;
+                transform: translate(-50%, -50%);
+            }
 
-        span, b {
-            color: #ffbe33;
-        }
+            span, b {
+                color: #ffbe33;
+            }
 
-        button {
-            padding: 1em 6em;
-            border: 0;
-            border-radius: 5px;
-            background-color: #ffbe33;
-            transition: all 0.3s ease-in;
-        }
+            button {
+                padding: 1em 6em;
+                border: 0;
+                border-radius: 5px;
+                background-color: #ffbe33;
+                transition: all 0.3s ease-in;
+            }
 
-        button:hover {
-            background-color: #e69c00;
-        }
+            button:hover {
+                background-color: #e69c00;
+            }
 
-        .spacing {
-            margin-top: 3rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <h1 style="margin-top: 0">
-                <span>{{#if (eq Locale "vi")}}Xin chào{{else}}Hello{{/if}}</span> {{FullName}}!
-            </h1>
-            <p>
-                {{#if (eq Locale "vi")}}
-                    Bạn đã đăng ký tài khoản thành công thông qua tài khoản Google của bạn
-                {{else}}
-                    You have successfully registered an account through your Google account
-                {{/if}}
-            </p>
-            <p>
-                {{#if (eq Locale "vi")}}
-                    Chào mừng bạn đến với Ptit Milk Tea
-                {{else}}
-                    Welcome to Ptit Milk Tea
-                {{/if}}
-            </p>
-            <div class="spacing">
+            .spacing {
+                margin-top: 3rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="card">
+                <h1 style="margin-top: 0">
+                    <span>{{#if (eq Locale "vi")}}Xin chào{{else}}Hello{{/if}}</span> {{FullName}}!
+                </h1>
                 <p>
                     {{#if (eq Locale "vi")}}
-                        Chúng tôi đã cấp cho bạn một tên đăng nhập và mật khẩu ngẫu nhiên
+                        Bạn đã đăng ký tài khoản thành công thông qua tài khoản Google của bạn
                     {{else}}
-                        We have granted you a random username and password
+                        You have successfully registered an account through your Google account
                     {{/if}}
                 </p>
                 <p>
                     {{#if (eq Locale "vi")}}
-                        Tuy nhiên, bạn vẫn có thể đăng nhập thông qua tài khoản Google
+                        Chào mừng bạn đến với Ptit Milk Tea
                     {{else}}
-                        However, you can still sign in using your Google account
+                        Welcome to Ptit Milk Tea
+                    {{/if}}
+                </p>
+                <div class="spacing">
+                    <p>
+                        {{#if (eq Locale "vi")}}
+                            Chúng tôi đã cấp cho bạn một tên đăng nhập và mật khẩu ngẫu nhiên
+                        {{else}}
+                            We have granted you a random username and password
+                        {{/if}}
+                    </p>
+                    <p>
+                        {{#if (eq Locale "vi")}}
+                            Tuy nhiên, bạn vẫn có thể đăng nhập thông qua tài khoản Google
+                        {{else}}
+                            However, you can still sign in using your Google account
+                        {{/if}}
+                    </p>
+                </div>
+                <div class="spacing">
+                    <p>{{#if (eq Locale "vi")}}Tên đăng nhập:{{else}}Username:{{/if}} <b>{{Username}}</b></p>
+                    <p>{{#if (eq Locale "vi")}}Mật khẩu:{{else}}Password:{{/if}} <b>{{Password}}</b></p>
+                </div>
+                <div class="spacing">
+                    <p>
+                        {{#if (eq Locale "vi")}}
+                            Để thay đổi mật khẩu, hãy ấn vào nút bên dưới
+                        {{else}}
+                            To update your password, click the below button
+                        {{/if}} 👇🏻
+                    </p>
+                    <a href="{{ChangePasswordUrl}}" target="_blank">
+                        <button style="cursor: pointer">
+                            {{#if (eq Locale "vi")}}Thay đổi mật khẩu{{else}}Update my password{{/if}}
+                        </button>
+                    </a>
+                </div>
+                <p class="spacing" style="margin-bottom: 0">
+                    {{#if (eq Locale "vi")}}
+                        Cảm ơn bạn đã ủng hộ PMT, chúc bạn một ngày tốt lành!
+                    {{else}}
+                        Thank you for choosing PMT, we wish you a great day!
                     {{/if}}
                 </p>
             </div>
-            <div class="spacing">
-                <p>{{#if (eq Locale "vi")}}Tên đăng nhập:{{else}}Username:{{/if}} <b>{{Username}}</b></p>
-                <p>{{#if (eq Locale "vi")}}Mật khẩu:{{else}}Password:{{/if}} <b>{{Password}}</b></p>
-            </div>
-            <div class="spacing">
-                <p>
-                    {{#if (eq Locale "vi")}}
-                        Để thay đổi mật khẩu, hãy ấn vào nút bên dưới
-                    {{else}}
-                        To update your password, click the below button
-                    {{/if}} 👇🏻
-                </p>
-                <a href="{{ChangePasswordUrl}}" target="_blank">
-                    <button style="cursor: pointer">
-                        {{#if (eq Locale "vi")}}Thay đổi mật khẩu{{else}}Update my password{{/if}}
-                    </button>
-                </a>
-            </div>
-            <p class="spacing" style="margin-bottom: 0">
-                {{#if (eq Locale "vi")}}
-                    Cảm ơn bạn đã ủng hộ PMT, chúc bạn một ngày tốt lành!
-                {{else}}
-                    Thank you for choosing PMT, we wish you a great day!
-                {{/if}}
-            </p>
         </div>
-    </div>
-</body>
+    </body>
 </html>

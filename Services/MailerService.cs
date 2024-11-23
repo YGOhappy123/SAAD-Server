@@ -87,7 +87,7 @@ namespace milktea_server.Services
             string locale
         )
         {
-            string title = "Pit Milk Tea - Đặt ký thành công";
+            string title = "Pit Milk Tea - Đăng ký thành công";
             string body = GenerateTemplate(
                 "GoogleRegistrationSuccess.hbs",
                 new

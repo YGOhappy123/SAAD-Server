@@ -295,7 +295,7 @@ namespace milktea_server.Services
             using var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", googleAccessToken);
 
-            var response = await httpClient.GetAsync("https://www.googleapis.com/oauth2/v3/userinfo");
+            var response = await httpClient.GetAsync(_configuration["GoogleApi:OAuthEndPoint"]);
             if (!response.IsSuccessStatusCode)
             {
                 return null;
