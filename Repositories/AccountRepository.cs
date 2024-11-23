@@ -20,17 +20,19 @@ namespace milktea_server.Repositories
 
         public async Task<Account?> GetAccountByUsername(string username)
         {
-            return await _dbContext.Accounts.SingleOrDefaultAsync(acc => acc.Username == username);
+            return await _dbContext.Accounts.SingleOrDefaultAsync(acc => acc.IsActive && acc.Username == username);
         }
 
         public async Task<Account?> GetAccountById(int accountId)
         {
-            return await _dbContext.Accounts.SingleOrDefaultAsync(acc => acc.Id == accountId);
+            return await _dbContext.Accounts.SingleOrDefaultAsync(acc => acc.IsActive && acc.Id == accountId);
         }
 
         public async Task<Account?> GetCustomerAccountByEmail(string email)
         {
-            return await _dbContext.Accounts.Where(acc => acc.Customer != null && acc.Customer.Email == email).FirstOrDefaultAsync();
+            return await _dbContext
+                .Accounts.Where(acc => acc.IsActive && acc.Customer != null && acc.Customer.Email == email)
+                .FirstOrDefaultAsync();
         }
 
         public async Task AddAccount(Account account)

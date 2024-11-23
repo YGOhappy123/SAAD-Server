@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using milktea_server.Dtos.Auth;
 using milktea_server.Dtos.Response;
@@ -78,71 +80,37 @@ namespace milktea_server.Services
         public async Task<ServiceResponse<Customer>> SignUpCustomerAccount(SignUpDto signUpDto)
         {
             var existedAccount = await _accountRepo.GetAccountByUsername(signUpDto.Username);
-
-            if (existedAccount == null)
+            if (existedAccount != null)
             {
-                var newAccount = new Account
-                {
-                    Username = signUpDto.Username,
-                    Password = BCrypt.Net.BCrypt.HashPassword(signUpDto.Password),
-                };
-
-                await _accountRepo.AddAccount(newAccount);
-
-                var newCustomer = new Customer
-                {
-                    FirstName = signUpDto.FirstName,
-                    LastName = signUpDto.LastName,
-                    AccountId = newAccount.Id,
-                    Avatar = _configuration["Application:DefaultUserAvatar"],
-                };
-
-                await _customerRepo.AddCustomer(newCustomer);
-
                 return new ServiceResponse<Customer>
                 {
-                    Status = ResStatusCode.CREATED,
-                    Success = true,
-                    Message = SuccessMessage.SIGN_UP_SUCCESSFULLY,
-                    Data = newCustomer,
-                    AccessToken = _jwtService.GenerateAccessToken(newCustomer!, UserRole.Customer),
-                    RefreshToken = _jwtService.GenerateRefreshToken(newAccount),
+                    Status = ResStatusCode.CONFLICT,
+                    Success = false,
+                    Message = ErrorMessage.USERNAME_EXISTED,
                 };
             }
-            else
+
+            var newAccount = new Account { Username = signUpDto.Username, Password = BCrypt.Net.BCrypt.HashPassword(signUpDto.Password) };
+            await _accountRepo.AddAccount(newAccount);
+
+            var newCustomer = new Customer
             {
-                if (existedAccount.IsActive)
-                {
-                    return new ServiceResponse<Customer>
-                    {
-                        Status = ResStatusCode.CONFLICT,
-                        Success = false,
-                        Message = ErrorMessage.USERNAME_EXISTED,
-                    };
-                }
-                else
-                {
-                    existedAccount.IsActive = true;
-                    existedAccount.Password = BCrypt.Net.BCrypt.HashPassword(signUpDto.Password);
-                    await _accountRepo.UpdateAccount(existedAccount);
+                FirstName = signUpDto.FirstName,
+                LastName = signUpDto.LastName,
+                AccountId = newAccount.Id,
+                Avatar = _configuration["Application:DefaultUserAvatar"],
+            };
+            await _customerRepo.AddCustomer(newCustomer);
 
-                    var customerData = await _customerRepo.GetCustomerByAccountId(existedAccount.Id);
-                    customerData!.FirstName = signUpDto.FirstName;
-                    customerData!.LastName = signUpDto.LastName;
-
-                    await _customerRepo.UpdateCustomer(customerData);
-
-                    return new ServiceResponse<Customer>
-                    {
-                        Status = ResStatusCode.OK,
-                        Success = true,
-                        Message = SuccessMessage.REACTIVATE_ACCOUNT_SUCCESSFULLY,
-                        Data = customerData,
-                        AccessToken = _jwtService.GenerateAccessToken(customerData!, UserRole.Customer),
-                        RefreshToken = _jwtService.GenerateRefreshToken(existedAccount),
-                    };
-                }
-            }
+            return new ServiceResponse<Customer>
+            {
+                Status = ResStatusCode.CREATED,
+                Success = true,
+                Message = SuccessMessage.SIGN_UP_SUCCESSFULLY,
+                Data = newCustomer,
+                AccessToken = _jwtService.GenerateAccessToken(newCustomer!, UserRole.Customer),
+                RefreshToken = _jwtService.GenerateRefreshToken(newAccount),
+            };
         }
 
         public async Task<ServiceResponse> RefreshToken(RefreshTokenDto refreshTokenDto)
@@ -253,6 +221,88 @@ namespace milktea_server.Services
                     Message = ErrorMessage.INVALID_CREDENTIALS,
                 };
             }
+        }
+
+        public async Task<ServiceResponse<Customer>> GoogleAuthentication(GoogleAuthDto googleAuthDto, string locale)
+        {
+            var googleUserInfo = await FetchGoogleUserInfoAsync(googleAuthDto.GoogleAccessToken);
+            if (googleUserInfo == null || !googleUserInfo.EmailVerified)
+            {
+                return new ServiceResponse<Customer>
+                {
+                    Status = ResStatusCode.UNAUTHORIZED,
+                    Success = false,
+                    Message = ErrorMessage.GOOGLE_AUTH_FAILED,
+                };
+            }
+
+            var existedAccount = await _accountRepo.GetCustomerAccountByEmail(googleUserInfo.Email);
+            if (existedAccount == null)
+            {
+                string randomUsername = RandomStringGenerator.GenerateRandomString(16);
+                string randomPassword = RandomStringGenerator.GenerateRandomString(16);
+
+                var newAccount = new Account { Username = randomUsername, Password = BCrypt.Net.BCrypt.HashPassword(randomPassword) };
+                await _accountRepo.AddAccount(newAccount);
+
+                var newCustomer = new Customer
+                {
+                    FirstName = googleUserInfo.FirstName,
+                    LastName = googleUserInfo.LastName,
+                    AccountId = newAccount.Id,
+                    Avatar = googleUserInfo.Picture ?? _configuration["Application:DefaultUserAvatar"],
+                    Email = googleUserInfo.Email,
+                };
+                await _customerRepo.AddCustomer(newCustomer);
+
+                await _mailerService.SendGoogleRegistrationSuccessEmail(
+                    googleUserInfo.Email,
+                    $"{newCustomer.LastName} {newCustomer.FirstName}",
+                    randomUsername,
+                    randomPassword,
+                    $"{_configuration["Application:ClientUrl"]}/profile/change-password",
+                    locale
+                );
+
+                return new ServiceResponse<Customer>
+                {
+                    Status = ResStatusCode.CREATED,
+                    Success = true,
+                    Message = SuccessMessage.GOOGLE_AUTH_SUCCESSFULLY,
+                    Data = newCustomer,
+                    AccessToken = _jwtService.GenerateAccessToken(newCustomer!, UserRole.Customer),
+                    RefreshToken = _jwtService.GenerateRefreshToken(newAccount),
+                };
+            }
+            else
+            {
+                var customerData = await _customerRepo.GetCustomerByAccountId(existedAccount.Id);
+
+                return new ServiceResponse<Customer>
+                {
+                    Status = ResStatusCode.OK,
+                    Success = true,
+                    Message = SuccessMessage.GOOGLE_AUTH_SUCCESSFULLY,
+                    Data = customerData,
+                    AccessToken = _jwtService.GenerateAccessToken(customerData!, UserRole.Customer),
+                    RefreshToken = _jwtService.GenerateRefreshToken(existedAccount),
+                };
+            }
+        }
+
+        private async Task<GoogleUserInfoDto?> FetchGoogleUserInfoAsync(string googleAccessToken)
+        {
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", googleAccessToken);
+
+            var response = await httpClient.GetAsync("https://www.googleapis.com/oauth2/v3/userinfo");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<GoogleUserInfoDto>(json);
         }
     }
 }

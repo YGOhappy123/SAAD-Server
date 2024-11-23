@@ -15,5 +15,6 @@ namespace milktea_server.Interfaces.Services
         Task<ServiceResponse> RefreshToken(RefreshTokenDto refreshTokenDto);
         Task<ServiceResponse> ForgotPassword(ForgotPasswordDto forgotPasswordDto, string locale);
         Task<ServiceResponse> ResetPassword(string resetPasswordToken, ResetPasswordDto resetPasswordDto);
+        Task<ServiceResponse<Customer>> GoogleAuthentication(GoogleAuthDto googleAuthDto, string locale);
     }
 }

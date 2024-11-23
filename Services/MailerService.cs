@@ -77,5 +77,30 @@ namespace milktea_server.Services
 
             await SendEmail(emailTo, title, body);
         }
+
+        public async Task SendGoogleRegistrationSuccessEmail(
+            string emailTo,
+            string fullname,
+            string username,
+            string password,
+            string changePasswordUrl,
+            string locale
+        )
+        {
+            string title = "Pit Milk Tea - Đặt ký thành công";
+            string body = GenerateTemplate(
+                "GoogleRegistrationSuccess.hbs",
+                new
+                {
+                    Fullname = fullname,
+                    Username = username,
+                    Password = password,
+                    ChangePasswordUrl = changePasswordUrl,
+                    Locale = locale,
+                }
+            );
+
+            await SendEmail(emailTo, title, body);
+        }
     }
 }

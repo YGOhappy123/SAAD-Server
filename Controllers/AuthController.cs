@@ -79,7 +79,16 @@ namespace milktea_server.Controllers
 
             return StatusCode(
                 result.Status,
-                new SuccessResponseDto { Message = result.Message, Data = new { User = result.Data!.ToCustomerDto() } }
+                new SuccessResponseDto
+                {
+                    Message = result.Message,
+                    Data = new
+                    {
+                        User = result.Data!.ToCustomerDto(),
+                        result.AccessToken,
+                        result.RefreshToken,
+                    },
+                }
             );
         }
 
@@ -141,6 +150,38 @@ namespace milktea_server.Controllers
             }
 
             return StatusCode(result.Status, new SuccessResponseDto { Message = result.Message });
+        }
+
+        [HttpPost("google-auth")]
+        public async Task<IActionResult> GoogleAuthentication([FromBody] GoogleAuthDto googleAuthDto, [FromQuery] string locale)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(
+                    ResStatusCode.UNPROCESSABLE_ENTITY,
+                    new ErrorResponseDto { Message = ErrorMessage.DATA_VALIDATION_FAILED }
+                );
+            }
+
+            var result = await _authService.GoogleAuthentication(googleAuthDto, locale);
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(
+                result.Status,
+                new SuccessResponseDto
+                {
+                    Message = result.Message,
+                    Data = new
+                    {
+                        User = result.Data!.ToCustomerDto(),
+                        result.AccessToken,
+                        result.RefreshToken,
+                    },
+                }
+            );
         }
 
         // [Authorize]
