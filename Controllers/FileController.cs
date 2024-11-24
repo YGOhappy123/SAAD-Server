@@ -34,7 +34,7 @@ namespace milktea_server.Controllers
                 );
             }
 
-            var result = await _fileService.UploadImageToCloudinary(uploadImageDto.File, "products");
+            var result = await _fileService.UploadImageToCloudinary(uploadImageDto.File, "ptit-milk-tea");
             if (!result.Success)
             {
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });

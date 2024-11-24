@@ -14,5 +14,6 @@ namespace milktea_server.Models
         public UserRole Role { get; set; } = UserRole.Customer;
         public bool IsActive { get; set; } = true;
         public Customer? Customer { get; set; }
+        public Admin? Admin { get; set; }
     }
 }
