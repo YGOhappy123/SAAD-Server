@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using milktea_server.Dtos.Response;
+using milktea_server.Extensions.Mappers;
 using milktea_server.Interfaces.Services;
-using milktea_server.Mappers;
 using milktea_server.Queries;
 
 namespace milktea_server.Controllers

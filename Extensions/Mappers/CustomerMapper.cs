@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using milktea_server.Dtos.Auth;
 using milktea_server.Models;
 
-namespace milktea_server.Mappers
+namespace milktea_server.Extensions.Mappers
 {
     public static class CustomerMapper
     {

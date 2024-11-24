@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using milktea_server.Dtos.Product;
 using milktea_server.Models;
 
-namespace milktea_server.Mappers
+namespace milktea_server.Extensions.Mappers
 {
     public static class MilkteaMapper
     {
