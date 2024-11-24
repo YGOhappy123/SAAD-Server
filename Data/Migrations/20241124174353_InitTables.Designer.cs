@@ -12,7 +12,7 @@ using milktea_server.Data;
 namespace milktea_server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241124143314_InitTables")]
+    [Migration("20241124174353_InitTables")]
     partial class InitTables
     {
         /// <inheritdoc />
@@ -77,10 +77,6 @@ namespace milktea_server.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

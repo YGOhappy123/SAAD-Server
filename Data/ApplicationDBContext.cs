@@ -27,7 +27,6 @@ namespace milktea_server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>().Property(acc => acc.Role).HasConversion<string>();
-            modelBuilder.Entity<Admin>().Property(ad => ad.Gender).HasConversion<string>();
             modelBuilder.Entity<Order>().Property(od => od.Status).HasConversion<string>();
             modelBuilder.Entity<OrderItem>().Property(odi => odi.Size).HasConversion<string>();
             modelBuilder.Entity<CartItem>().Property(ci => ci.Size).HasConversion<string>();
