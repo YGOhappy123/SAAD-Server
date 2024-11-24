@@ -90,7 +90,9 @@ namespace milktea_server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountId")
+                        .IsUnique()
+                        .HasFilter("[AccountId] IS NOT NULL");
 
                     b.HasIndex("CreatedById");
 
@@ -423,8 +425,8 @@ namespace milktea_server.Data.Migrations
             modelBuilder.Entity("milktea_server.Models.Admin", b =>
                 {
                     b.HasOne("milktea_server.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId");
+                        .WithOne("Admin")
+                        .HasForeignKey("milktea_server.Models.Admin", "AccountId");
 
                     b.HasOne("milktea_server.Models.Admin", "CreatedBy")
                         .WithMany("CreatedAdmins")
@@ -530,6 +532,8 @@ namespace milktea_server.Data.Migrations
 
             modelBuilder.Entity("milktea_server.Models.Account", b =>
                 {
+                    b.Navigation("Admin");
+
                     b.Navigation("Customer");
                 });
 

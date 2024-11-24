@@ -284,7 +284,9 @@ namespace milktea_server.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_AccountId",
                 table: "Admins",
-                column: "AccountId");
+                column: "AccountId",
+                unique: true,
+                filter: "[AccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_CreatedById",
