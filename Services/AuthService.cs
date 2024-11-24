@@ -51,7 +51,7 @@ namespace milktea_server.Services
                 {
                     Status = ResStatusCode.UNAUTHORIZED,
                     Success = false,
-                    Message = ErrorMessage.INVALID_CREDENTIALS,
+                    Message = ErrorMessage.INCORRECT_USERNAME_OR_PASSWORD,
                 };
             }
 

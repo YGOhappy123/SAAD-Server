@@ -185,7 +185,7 @@ namespace milktea_server.Controllers
         }
 
         [Authorize]
-        [HttpGet("deactivate-account")]
+        [HttpPost("deactivate-account")]
         public async Task<IActionResult> DeactivateAccount([FromBody] DeactivateAccountDto deactivateAccountDto)
         {
             if (!ModelState.IsValid)
