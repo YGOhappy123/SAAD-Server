@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        PMT | {{#if (eq Locale "vi")}}Xác nhận đơn hàng{{else}}Order confirmation{{/if}}
+    </title>
+    <style>
+        body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 700px;
+            height: 100%;
+            padding: 35px;
+            border-radius: 5px;
+            background-color: #222831;
+            color: #fff;
+        }
+
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            transform: translate(-50%, -50%);
+        }
+
+        span, b {
+            color: #ffbe33;
+        }
+
+        button {
+            padding: 1em 6em;
+            border: 0;
+            border-radius: 5px;
+            background-color: #ffbe33;
+            transition: all 0.3s ease-in;
+        }
+
+        button:hover {
+            background-color: #e69c00;
+        }
+
+        .spacing {
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 style="margin-top: 0">
+                <span>{{#if (eq Locale "vi")}}Xin chào{{else}}Hello{{/if}}</span> {{FirstName}}!
+            </h1>
+            <p>
+                {{#if (eq Locale "vi")}}
+                    Đơn hàng của bạn với mã đơn <b>{{OrderId}}</b> đã được chấp nhận lúc <b>{{AcceptedAt}}</b>
+                {{else}}
+                    Your order with the id <b>{{OrderId}}</b> has been accepted at <b>{{AcceptedAt}}</b>
+                {{/if}}
+            </p>
+            <p>
+                {{#if (eq Locale "vi")}}
+                    Chúng tôi sẽ cố gắng hoàn thành sớm nhất cho bạn
+                {{else}}
+                    We will try to complete it for you as soon as possible
+                {{/if}}
+            </p>
+
+            <div class="spacing">
+                <p>
+                    {{#if (eq Locale "vi")}}
+                        Để theo dõi các đơn hàng của bạn, hãy ấn vào nút bên dưới
+                    {{else}}
+                        To keep track of your orders, click the below button
+                    {{/if}} 👇🏻
+                </p>
+                <a href="{{ManageOrdersUrl}}" target="_blank">
+                    <button style="cursor: pointer">
+                        {{#if (eq Locale "vi")}}Theo dõi đơn hàng{{else}}See my orders{{/if}}
+                    </button>
+                </a>
+            </div>
+
+            <p class="spacing" style="margin-bottom: 0">
+                {{#if (eq Locale "vi")}}
+                    Cảm ơn bạn đã ủng hộ PMT, chúc bạn một ngày tốt lành!
+                {{else}}
+                    Thank you for choosing PMT, we wish you a great day!
+                {{/if}}
+            </p>
+        </div>
+    </div>
+</body>
+</html>

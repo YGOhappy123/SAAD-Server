@@ -44,7 +44,6 @@ namespace milktea_server.Services
         public async Task<ServiceResponse<AppUser>> SignIn(SignInDto signInDto)
         {
             var existedAccount = await _accountRepo.GetAccountByUsername(signInDto.Username);
-
             if (existedAccount == null || !BCrypt.Net.BCrypt.Verify(signInDto.Password, existedAccount.Password))
             {
                 return new ServiceResponse<AppUser>
@@ -148,10 +147,33 @@ namespace milktea_server.Services
             }
         }
 
+        public async Task<ServiceResponse> ChangePassword(ChangePasswordDto changePasswordDto, int authUserId, string authUserRole)
+        {
+            var targetAccount = await _accountRepo.GetAccountByUserIdAndRole(authUserId, authUserRole);
+            if (targetAccount == null || !BCrypt.Net.BCrypt.Verify(changePasswordDto.OldPassword, targetAccount.Password))
+            {
+                return new ServiceResponse
+                {
+                    Status = ResStatusCode.UNAUTHORIZED,
+                    Success = false,
+                    Message = ErrorMessage.INCORRECT_USERNAME_OR_PASSWORD,
+                };
+            }
+
+            targetAccount.Password = BCrypt.Net.BCrypt.HashPassword(changePasswordDto.NewPassword);
+            await _accountRepo.UpdateAccount(targetAccount);
+
+            return new ServiceResponse
+            {
+                Status = ResStatusCode.OK,
+                Success = true,
+                Message = SuccessMessage.CHANGE_PASSWORD_SUCCESSFULLY,
+            };
+        }
+
         public async Task<ServiceResponse> ForgotPassword(ForgotPasswordDto forgotPasswordDto, string locale)
         {
             var existedCustomer = await _customerRepo.GetCustomerByEmail(forgotPasswordDto.Email, isAccountIncluded: true);
-
             if (existedCustomer == null || existedCustomer.Account == null || !existedCustomer.Account.IsActive)
             {
                 return new ServiceResponse
@@ -161,22 +183,20 @@ namespace milktea_server.Services
                     Message = ErrorMessage.USER_NOT_FOUND,
                 };
             }
-            else
-            {
-                await _mailerService.SendResetPasswordEmail(
-                    forgotPasswordDto.Email,
-                    $"{existedCustomer.LastName} {existedCustomer.FirstName}",
-                    $"{_configuration["Application:ClientUrl"]}?token={_jwtService.GenerateResetPasswordToken(existedCustomer)}",
-                    locale
-                );
 
-                return new ServiceResponse
-                {
-                    Status = ResStatusCode.OK,
-                    Success = true,
-                    Message = SuccessMessage.RESET_PASSWORD_EMAIL_SENT,
-                };
-            }
+            await _mailerService.SendResetPasswordEmail(
+                forgotPasswordDto.Email,
+                $"{existedCustomer.LastName} {existedCustomer.FirstName}",
+                $"{_configuration["Application:ClientUrl"]}?token={_jwtService.GenerateResetPasswordToken(existedCustomer)}",
+                locale
+            );
+
+            return new ServiceResponse
+            {
+                Status = ResStatusCode.OK,
+                Success = true,
+                Message = SuccessMessage.RESET_PASSWORD_EMAIL_SENT,
+            };
         }
 
         public async Task<ServiceResponse> ResetPassword(string resetPasswordToken, ResetPasswordDto resetPasswordDto)

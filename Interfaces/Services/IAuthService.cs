@@ -13,6 +13,7 @@ namespace milktea_server.Interfaces.Services
         Task<ServiceResponse<AppUser>> SignIn(SignInDto signInDto);
         Task<ServiceResponse<Customer>> SignUpCustomerAccount(SignUpDto signUpDto);
         Task<ServiceResponse> RefreshToken(RefreshTokenDto refreshTokenDto);
+        Task<ServiceResponse> ChangePassword(ChangePasswordDto changePasswordDto, int authUserId, string authUserRole);
         Task<ServiceResponse> ForgotPassword(ForgotPasswordDto forgotPasswordDto, string locale);
         Task<ServiceResponse> ResetPassword(string resetPasswordToken, ResetPasswordDto resetPasswordDto);
         Task<ServiceResponse<Customer>> GoogleAuthentication(GoogleAuthDto googleAuthDto, string locale);

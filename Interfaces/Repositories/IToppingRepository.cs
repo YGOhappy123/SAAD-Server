@@ -10,5 +10,7 @@ namespace milktea_server.Interfaces.Repositories
     public interface IToppingRepository
     {
         Task<(List<Topping>, int)> GetAllToppings(BaseQueryObject queryObject);
+
+        Task<Topping?> GetToppingById(int toppingId);
     }
 }

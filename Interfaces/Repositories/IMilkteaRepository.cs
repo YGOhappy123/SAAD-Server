@@ -10,5 +10,6 @@ namespace milktea_server.Interfaces.Repositories
     public interface IMilkteaRepository
     {
         Task<(List<Milktea>, int)> GetAllMilkteas(BaseQueryObject queryObject);
+        Task<Milktea?> GetMilkteaById(int milkteaId);
     }
 }

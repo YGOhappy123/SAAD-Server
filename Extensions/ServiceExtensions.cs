@@ -128,8 +128,11 @@ namespace milktea_server.Extensions
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IMilkteaRepository, MilkteaRepository>();
             services.AddScoped<IToppingRepository, ToppingRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IMailerService, MailerService>();

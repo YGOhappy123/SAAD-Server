@@ -32,27 +32,25 @@ namespace milktea_server.Repositories
                     switch (filter.Key)
                     {
                         case "startTime":
-                            var startTime = DateTime.Parse(value);
-                            query = query.Where(m => m.CreatedAt >= startTime);
+                            query = query.Where(mt => mt.CreatedAt >= DateTime.Parse(value));
                             break;
                         case "endTime":
-                            var endTime = DateTime.Parse(value);
-                            query = query.Where(m => m.CreatedAt <= endTime);
+                            query = query.Where(mt => mt.CreatedAt <= DateTime.Parse(value));
                             break;
                         case "nameVi":
-                            query = query.Where(m => m.NameVi.Contains(value));
+                            query = query.Where(mt => mt.NameVi.Contains(value));
                             break;
                         case "nameEn":
-                            query = query.Where(m => m.NameEn.Contains(value));
+                            query = query.Where(mt => mt.NameEn.Contains(value));
                             break;
                         case "minPrice":
-                            query = query.Where(m => m.PriceL >= Convert.ToDecimal(value));
+                            query = query.Where(mt => mt.PriceL >= Convert.ToDecimal(value));
                             break;
                         case "maxPrice":
-                            query = query.Where(m => m.PriceS <= Convert.ToDecimal(value));
+                            query = query.Where(mt => mt.PriceS <= Convert.ToDecimal(value));
                             break;
                         default:
-                            query = query.Where(m => EF.Property<string>(m, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(mt => EF.Property<string>(mt, filter.Key.CapitalizeEachWords()) == value);
                             break;
                     }
                 }
@@ -67,8 +65,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(m => EF.Property<object>(m, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(m => EF.Property<object>(m, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(mt => EF.Property<object>(mt, order.Key.CapitalizeEachWords()))
+                        : query.OrderByDescending(mt => EF.Property<object>(mt, order.Key.CapitalizeEachWords()));
             }
 
             return query;
@@ -76,7 +74,7 @@ namespace milktea_server.Repositories
 
         public async Task<(List<Milktea>, int)> GetAllMilkteas(BaseQueryObject queryObject)
         {
-            var query = _dbContext.Milkteas.Include(m => m.Category).AsQueryable();
+            var query = _dbContext.Milkteas.Include(mt => mt.Category).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(queryObject.Filter))
             {
@@ -101,6 +99,11 @@ namespace milktea_server.Repositories
             var milkteas = await query.ToListAsync();
 
             return (milkteas, total);
+        }
+
+        public async Task<Milktea?> GetMilkteaById(int milkteaId)
+        {
+            return await _dbContext.Milkteas.Where(mt => mt.IsActive && mt.Id == milkteaId).FirstOrDefaultAsync();
         }
     }
 }
