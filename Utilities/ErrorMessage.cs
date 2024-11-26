@@ -11,6 +11,7 @@ namespace milktea_server.Utilities
         public const string USER_NOT_FOUND = "USER_NOT_FOUND";
         public const string GOOGLE_AUTH_FAILED = "GOOGLE_AUTH_FAILED";
         public const string ORDER_NOT_FOUND = "ORDER_NOT_FOUND";
+        public const string CART_ITEM_NOT_FOUND = "CART_ITEM_NOT_FOUND";
         public const string INVALID_CREDENTIALS = "INVALID_CREDENTIALS";
         public const string INCORRECT_USERNAME_OR_PASSWORD = "INCORRECT_USERNAME_OR_PASSWORD";
         public const string DATA_VALIDATION_FAILED = "DATA_VALIDATION_FAILED";

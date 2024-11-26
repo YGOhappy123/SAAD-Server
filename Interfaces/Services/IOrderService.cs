@@ -11,7 +11,7 @@ namespace milktea_server.Interfaces.Services
 {
     public interface IOrderService
     {
-        Task<ServiceResponse> CreateOrder(CreateOrderDto createOrderDto, int customerId);
+        Task<ServiceResponse> CreateOrder(CreateOrderDto createOrderDto, int customerId, string locale);
         Task<ServiceResponse<List<Order>>> GetCustomerOrders(int customerId, string? sortByJson);
         Task<ServiceResponse<List<Order>>> GetAllOrders(BaseQueryObject queryObject);
         Task<ServiceResponse<Order>> GetOrderDetail(int orderId, int authUserId, string authUserRole);

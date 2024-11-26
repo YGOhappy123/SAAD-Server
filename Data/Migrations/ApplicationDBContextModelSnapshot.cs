@@ -452,7 +452,8 @@ namespace milktea_server.Data.Migrations
                 {
                     b.HasOne("milktea_server.Models.CartItem", "CartItem")
                         .WithMany("Toppings")
-                        .HasForeignKey("CartItemId");
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("milktea_server.Models.Topping", "Topping")
                         .WithMany()

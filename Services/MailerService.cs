@@ -102,5 +102,30 @@ namespace milktea_server.Services
 
             await SendEmail(emailTo, title, body);
         }
+
+        public async Task SendOrderConfirmationEmail(
+            string emailTo,
+            string fullname,
+            string orderId,
+            string manageOrdersUrl,
+            string acceptedAt,
+            string locale
+        )
+        {
+            string title = "Pit Milk Tea - Xác nhận đơn hàng";
+            string body = GenerateTemplate(
+                "OrderConfirmation.hbs",
+                new
+                {
+                    Fullname = fullname,
+                    OrderId = orderId,
+                    ManageOrdersUrl = manageOrdersUrl,
+                    AcceptedAt = acceptedAt,
+                    Locale = locale,
+                }
+            );
+
+            await SendEmail(emailTo, title, body);
+        }
     }
 }

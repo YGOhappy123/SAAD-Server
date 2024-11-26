@@ -27,7 +27,7 @@ namespace milktea_server.Controllers
 
         [Authorize(Roles = "Customer")]
         [HttpPost("create-order")]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto)
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto, [FromQuery] string locale)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +39,7 @@ namespace milktea_server.Controllers
 
             var authUserId = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
 
-            var result = await _orderService.CreateOrder(createOrderDto, int.Parse(authUserId!));
+            var result = await _orderService.CreateOrder(createOrderDto, int.Parse(authUserId!), locale);
             if (!result.Success)
             {
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
@@ -60,18 +60,7 @@ namespace milktea_server.Controllers
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
             }
 
-            return StatusCode(
-                result.Status,
-                new SuccessResponseDto
-                {
-                    Data = new
-                    {
-                        Orders = result.Data!.Select(or => or.ToOrderDto()),
-                        result.Total,
-                        result.Took,
-                    },
-                }
-            );
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data!.Select(or => or.ToOrderDto()) });
         }
 
         [Authorize(Roles = "Admin")]
@@ -118,6 +107,14 @@ namespace milktea_server.Controllers
         [HttpPatch("status/{orderId:int}")]
         public async Task<IActionResult> UpdateOrderStatus([FromRoute] int orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(
+                    ResStatusCode.UNPROCESSABLE_ENTITY,
+                    new ErrorResponseDto { Message = ErrorMessage.DATA_VALIDATION_FAILED }
+                );
+            }
+
             var authUserId = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
 
             var result = await _orderService.UpdateOrderStatus(orderId, updateOrderStatusDto, int.Parse(authUserId!));

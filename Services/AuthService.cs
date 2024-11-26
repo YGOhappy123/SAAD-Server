@@ -21,6 +21,7 @@ namespace milktea_server.Services
         private readonly IAccountRepository _accountRepo;
         private readonly ICustomerRepository _customerRepo;
         private readonly IAdminRepository _adminRepo;
+        private readonly ICartRepository _cartRepo;
         private readonly IJwtService _jwtService;
         private readonly IMailerService _mailerService;
 
@@ -29,6 +30,7 @@ namespace milktea_server.Services
             IAccountRepository accountRepo,
             ICustomerRepository customerRepo,
             IAdminRepository adminRepo,
+            ICartRepository cartRepo,
             IJwtService jwtService,
             IMailerService mailerService
         )
@@ -37,6 +39,7 @@ namespace milktea_server.Services
             _accountRepo = accountRepo;
             _customerRepo = customerRepo;
             _adminRepo = adminRepo;
+            _cartRepo = cartRepo;
             _jwtService = jwtService;
             _mailerService = mailerService;
         }
@@ -352,6 +355,11 @@ namespace milktea_server.Services
 
             targetAccount.IsActive = false;
             await _accountRepo.UpdateAccount(targetAccount);
+
+            if (targetAccount.Role == UserRole.Customer)
+            {
+                await _cartRepo.ResetCart(deactivateAccountDto.TargetUserId);
+            }
 
             return new ServiceResponse
             {

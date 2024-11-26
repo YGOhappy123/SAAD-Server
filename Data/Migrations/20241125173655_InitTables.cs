@@ -247,7 +247,8 @@ namespace milktea_server.Data.Migrations
                         name: "FK_CartItemToppings_CartItems_CartItemId",
                         column: x => x.CartItemId,
                         principalTable: "CartItems",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CartItemToppings_Toppings_ToppingId",
                         column: x => x.ToppingId,

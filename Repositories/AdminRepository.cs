@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using milktea_server.Data;
 using milktea_server.Interfaces.Repositories;
 using milktea_server.Models;
+using milktea_server.Queries;
 
 namespace milktea_server.Repositories
 {
@@ -26,6 +27,11 @@ namespace milktea_server.Repositories
         public async Task<Admin?> GetAdminByAccountId(int accountId)
         {
             return await _dbContext.Admins.SingleOrDefaultAsync(ad => ad.AccountId == accountId);
+        }
+
+        public async Task<(List<Admin>, int)> GetAllAdmins(BaseQueryObject queryObject)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task AddAdmin(Admin admin)

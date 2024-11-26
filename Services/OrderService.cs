@@ -15,18 +15,34 @@ namespace milktea_server.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly IConfiguration _configuration;
         private readonly IOrderRepository _orderRepo;
         private readonly IMilkteaRepository _milkteaRepo;
         private readonly IToppingRepository _toppingRepo;
+        private readonly ICartRepository _cartRepo;
+        private readonly ICustomerRepository _customerRepo;
+        private readonly IMailerService _mailerService;
 
-        public OrderService(IOrderRepository orderRepo, IMilkteaRepository milkteaRepo, IToppingRepository toppingRepo)
+        public OrderService(
+            IConfiguration configuration,
+            IOrderRepository orderRepo,
+            IMilkteaRepository milkteaRepo,
+            IToppingRepository toppingRepo,
+            ICartRepository cartRepo,
+            ICustomerRepository customerRepo,
+            IMailerService mailerService
+        )
         {
+            _configuration = configuration;
             _orderRepo = orderRepo;
             _milkteaRepo = milkteaRepo;
             _toppingRepo = toppingRepo;
+            _cartRepo = cartRepo;
+            _customerRepo = customerRepo;
+            _mailerService = mailerService;
         }
 
-        public async Task<ServiceResponse> CreateOrder(CreateOrderDto createOrderDto, int customerId)
+        public async Task<ServiceResponse> CreateOrder(CreateOrderDto createOrderDto, int customerId, string locale)
         {
             try
             {
@@ -80,6 +96,20 @@ namespace milktea_server.Services
                 newOrder.TotalPrice = newOrder.Items.Sum(item => item.Quantity * (item.Price + item.Toppings.Sum(tp => tp.Price)));
 
                 await _orderRepo.CreateOrder(newOrder);
+                await _cartRepo.ResetCart(customerId);
+
+                var customer = await _customerRepo.GetCustomerById(customerId);
+                if (!string.IsNullOrEmpty(customer?.Email))
+                {
+                    await _mailerService.SendOrderConfirmationEmail(
+                        customer.Email,
+                        $"{customer.LastName} {customer.FirstName}",
+                        newOrder.Id.ToString(),
+                        $"{_configuration["Application:ClientUrl"]}/profile/orders",
+                        newOrder.CreatedAt.ToString("HH:mm dd/MM/yyyy"),
+                        locale
+                    );
+                }
 
                 return new ServiceResponse
                 {
@@ -184,6 +214,7 @@ namespace milktea_server.Services
             order.ProcessingStaffId = staffId;
             order.Status = Enum.Parse<OrderStatus>(updateOrderStatusDto.Status);
             order.RejectionReason = updateOrderStatusDto.RejectionReason;
+            order.UpdatedAt = TimestampHandler.GetNow();
 
             await _orderRepo.UpdateOrder(order);
 

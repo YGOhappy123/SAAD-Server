@@ -59,13 +59,13 @@
     <div class="container">
         <div class="card">
             <h1 style="margin-top: 0">
-                <span>{{#if (eq Locale "vi")}}Xin chào{{else}}Hello{{/if}}</span> {{FirstName}}!
+                <span>{{#if (eq Locale "vi")}}Xin chào{{else}}Hello{{/if}}</span> {{FullName}}!
             </h1>
             <p>
                 {{#if (eq Locale "vi")}}
-                    Đơn hàng của bạn với mã đơn <b>{{OrderId}}</b> đã được chấp nhận lúc <b>{{AcceptedAt}}</b>
+                    Đơn hàng của bạn với mã đơn <b>{{OrderId}}</b> đã được đặt thành công lúc <b>{{AcceptedAt}}</b>
                 {{else}}
-                    Your order with the id <b>{{OrderId}}</b> has been accepted at <b>{{AcceptedAt}}</b>
+                    Your order with the id <b>{{OrderId}}</b> has been successfully placed at <b>{{AcceptedAt}}</b>
                 {{/if}}
             </p>
             <p>

@@ -12,7 +12,7 @@ using milktea_server.Data;
 namespace milktea_server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241124174353_InitTables")]
+    [Migration("20241125173655_InitTables")]
     partial class InitTables
     {
         /// <inheritdoc />
@@ -455,7 +455,8 @@ namespace milktea_server.Data.Migrations
                 {
                     b.HasOne("milktea_server.Models.CartItem", "CartItem")
                         .WithMany("Toppings")
-                        .HasForeignKey("CartItemId");
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("milktea_server.Models.Topping", "Topping")
                         .WithMany()

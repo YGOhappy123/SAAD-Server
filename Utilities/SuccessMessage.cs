@@ -19,5 +19,9 @@ namespace milktea_server.Utilities
         public const string DELETE_IMAGE_SUCCESSFULLY = "DELETE_IMAGE_SUCCESSFULLY";
         public const string CREATE_ORDER_SUCCESSFULLY = "CREATE_ORDER_SUCCESSFULLY";
         public const string UPDATE_ORDER_STATUS_SUCCESSFULLY = "UPDATE_ORDER_STATUS_SUCCESSFULLY";
+        public const string ADD_TO_CART_SUCCESSFULLY = "ADD_TO_CART_SUCCESSFULLY";
+        public const string UPDATE_CART_SUCCESSFULLY = "UPDATE_CART_SUCCESSFULLY";
+        public const string REMOVE_FROM_CART_SUCCESSFULLY = "REMOVE_FROM_CART_SUCCESSFULLY";
+        public const string RESET_CART_SUCCESSFULLY = "RESET_CART_SUCCESSFULLY";
     }
 }

@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using milktea_server.Data;
+using milktea_server.Enums;
 using milktea_server.Interfaces.Repositories;
 using milktea_server.Models;
 using milktea_server.Queries;
@@ -157,6 +158,19 @@ namespace milktea_server.Repositories
         {
             _dbContext.Orders.Update(order);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> CountCustomerOrders(int customerId, string timeUnit)
+        {
+            var currentTime = TimestampHandler.GetNow();
+            var startTime = TimestampHandler.GetStartOfTimeByType(currentTime, timeUnit);
+            var endTime = TimestampHandler.GetEndOfTimeByType(currentTime, timeUnit);
+
+            return await _dbContext
+                .Orders.Where(od =>
+                    od.CustomerId == customerId && od.CreatedAt >= startTime && od.CreatedAt <= endTime && od.Status == OrderStatus.Done
+                )
+                .CountAsync();
         }
     }
 }

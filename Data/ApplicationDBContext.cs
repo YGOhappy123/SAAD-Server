@@ -30,6 +30,13 @@ namespace milktea_server.Data
             modelBuilder.Entity<Order>().Property(od => od.Status).HasConversion<string>();
             modelBuilder.Entity<OrderItem>().Property(odi => odi.Size).HasConversion<string>();
             modelBuilder.Entity<CartItem>().Property(ci => ci.Size).HasConversion<string>();
+
+            modelBuilder
+                .Entity<CartItem>()
+                .HasMany(ci => ci.Toppings)
+                .WithOne(cit => cit.CartItem)
+                .HasForeignKey(cit => cit.CartItemId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
