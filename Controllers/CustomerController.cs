@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using milktea_server.Dtos.Order;
 using milktea_server.Dtos.Response;
+using milktea_server.Dtos.User;
 using milktea_server.Extensions.Mappers;
 using milktea_server.Interfaces.Services;
 using milktea_server.Queries;
@@ -51,9 +52,25 @@ namespace milktea_server.Controllers
 
         [Authorize(Roles = "Customer")]
         [HttpPatch("profile")]
-        public async Task<IActionResult> UpdateCustomerProfile()
+        public async Task<IActionResult> UpdateCustomerProfile([FromBody] UpdateCustomerDto updateCustomerDto)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(
+                    ResStatusCode.UNPROCESSABLE_ENTITY,
+                    new ErrorResponseDto { Message = ErrorMessage.DATA_VALIDATION_FAILED }
+                );
+            }
+
+            var authUserId = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+
+            var result = await _userService.UpdateCustomerProfile(updateCustomerDto, int.Parse(authUserId!));
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(result.Status, new SuccessResponseDto { Message = result.Message });
         }
 
         [Authorize(Roles = "Customer")]

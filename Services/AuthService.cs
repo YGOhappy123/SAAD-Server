@@ -176,8 +176,8 @@ namespace milktea_server.Services
 
         public async Task<ServiceResponse> ForgotPassword(ForgotPasswordDto forgotPasswordDto, string locale)
         {
-            var existedCustomer = await _customerRepo.GetCustomerByEmail(forgotPasswordDto.Email, isAccountIncluded: true);
-            if (existedCustomer == null || existedCustomer.Account == null || !existedCustomer.Account.IsActive)
+            var existedCustomer = await _customerRepo.GetCustomerByEmail(forgotPasswordDto.Email);
+            if (existedCustomer == null)
             {
                 return new ServiceResponse
                 {

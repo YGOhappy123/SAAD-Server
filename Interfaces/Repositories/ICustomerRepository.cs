@@ -11,7 +11,7 @@ namespace milktea_server.Interfaces.Repositories
     {
         Task<Customer?> GetCustomerById(int customerId);
         Task<Customer?> GetCustomerByAccountId(int accountId);
-        Task<Customer?> GetCustomerByEmail(string email, bool isAccountIncluded = false);
+        Task<Customer?> GetCustomerByEmail(string email);
         Task<(List<Customer>, int)> GetAllCustomers(BaseQueryObject queryObject);
         Task AddCustomer(Customer customer);
         Task UpdateCustomer(Customer customer);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using milktea_server.Dtos.Order;
 using milktea_server.Dtos.Response;
 using milktea_server.Dtos.Statistic;
+using milktea_server.Dtos.User;
 using milktea_server.Models;
 using milktea_server.Queries;
 
@@ -13,9 +14,10 @@ namespace milktea_server.Interfaces.Services
     public interface IUserService
     {
         Task<ServiceResponse<List<CustomerWithSales>>> GetAllCustomers(BaseQueryObject queryObject);
-        Task<ServiceResponse> UpdateCustomerProfile();
+        Task<ServiceResponse> UpdateCustomerProfile(UpdateCustomerDto updateCustomerDto, int customerId);
 
         Task<ServiceResponse<List<Admin>>> GetAllAdmins(BaseQueryObject queryObject);
+        Task<ServiceResponse> CreateNewAdmin();
         Task<ServiceResponse> UpdateAdminProfile();
 
         Task<ServiceResponse<List<CartItem>>> GetCustomerCartItems(int customerId);

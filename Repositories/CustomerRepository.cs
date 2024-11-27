@@ -74,7 +74,10 @@ namespace milktea_server.Repositories
 
         public async Task<Customer?> GetCustomerById(int customerId)
         {
-            return await _dbContext.Customers.SingleOrDefaultAsync(c => c.Id == customerId);
+            return await _dbContext
+                .Customers.Include(c => c.Account)
+                .Where(c => c.Account!.IsActive && c.Id == customerId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Customer?> GetCustomerByAccountId(int accountId)
@@ -82,16 +85,12 @@ namespace milktea_server.Repositories
             return await _dbContext.Customers.SingleOrDefaultAsync(c => c.AccountId == accountId);
         }
 
-        public async Task<Customer?> GetCustomerByEmail(string email, bool isAccountIncluded)
+        public async Task<Customer?> GetCustomerByEmail(string email)
         {
-            if (isAccountIncluded)
-            {
-                return await _dbContext.Customers.Include(c => c.Account).SingleOrDefaultAsync(c => c.Email == email);
-            }
-            else
-            {
-                return await _dbContext.Customers.SingleOrDefaultAsync(c => c.Email == email);
-            }
+            return await _dbContext
+                .Customers.Include(c => c.Account)
+                .Where(c => c.Account!.IsActive && c.Email == email)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<(List<Customer>, int)> GetAllCustomers(BaseQueryObject queryObject)

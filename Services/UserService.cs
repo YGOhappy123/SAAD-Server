@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using milktea_server.Dtos.Order;
 using milktea_server.Dtos.Response;
 using milktea_server.Dtos.Statistic;
+using milktea_server.Dtos.User;
 using milktea_server.Enums;
 using milktea_server.Extensions.Mappers;
 using milktea_server.Interfaces.Repositories;
@@ -72,12 +73,69 @@ namespace milktea_server.Services
             };
         }
 
-        public async Task<ServiceResponse> UpdateCustomerProfile()
+        public async Task<ServiceResponse> UpdateCustomerProfile(UpdateCustomerDto updateCustomerDto, int customerId)
+        {
+            var targetCustomer = await _customerRepo.GetCustomerById(customerId);
+            if (targetCustomer == null)
+            {
+                return new ServiceResponse
+                {
+                    Status = ResStatusCode.NOT_FOUND,
+                    Success = false,
+                    Message = ErrorMessage.USER_NOT_FOUND,
+                };
+            }
+
+            targetCustomer.FirstName = updateCustomerDto.FirstName;
+            targetCustomer.LastName = updateCustomerDto.LastName;
+
+            if (!string.IsNullOrEmpty(updateCustomerDto.Avatar))
+            {
+                targetCustomer.Avatar = updateCustomerDto.Avatar;
+            }
+
+            if (!string.IsNullOrEmpty(updateCustomerDto.Address))
+            {
+                targetCustomer.Address = updateCustomerDto.Address;
+            }
+
+            if (!string.IsNullOrEmpty(updateCustomerDto.PhoneNumber))
+            {
+                targetCustomer.PhoneNumber = updateCustomerDto.PhoneNumber;
+            }
+
+            if (!string.IsNullOrEmpty(updateCustomerDto.Email))
+            {
+                var customerWithThisEmail = await _customerRepo.GetCustomerByEmail(updateCustomerDto.Email);
+                if (customerWithThisEmail != null && customerWithThisEmail.Id != customerId)
+                {
+                    return new ServiceResponse
+                    {
+                        Status = ResStatusCode.CONFLICT,
+                        Success = false,
+                        Message = ErrorMessage.EMAIL_EXISTED,
+                    };
+                }
+
+                targetCustomer.Email = updateCustomerDto.Email;
+            }
+
+            await _customerRepo.UpdateCustomer(targetCustomer);
+
+            return new ServiceResponse
+            {
+                Status = ResStatusCode.OK,
+                Success = true,
+                Message = SuccessMessage.UPDATE_USER_SUCCESSFULLY,
+            };
+        }
+
+        public async Task<ServiceResponse<List<Admin>>> GetAllAdmins(BaseQueryObject queryObject)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse<List<Admin>>> GetAllAdmins(BaseQueryObject queryObject)
+        public async Task<ServiceResponse> CreateNewAdmin()
         {
             throw new NotImplementedException();
         }
