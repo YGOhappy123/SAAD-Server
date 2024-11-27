@@ -17,8 +17,9 @@ namespace milktea_server.Interfaces.Services
         Task<ServiceResponse> UpdateCustomerProfile(UpdateCustomerDto updateCustomerDto, int customerId);
 
         Task<ServiceResponse<List<Admin>>> GetAllAdmins(BaseQueryObject queryObject);
-        Task<ServiceResponse> CreateNewAdmin();
-        Task<ServiceResponse> UpdateAdminProfile();
+        Task<ServiceResponse> CreateNewAdmin(CreateAdminDto createAdminDto, int authUserId, string locale);
+        Task<ServiceResponse> UpdateAdminProfile(UpdateAdminDto updateAdminDto, int adminId);
+        Task<ServiceResponse> ToggleAdminActiveStatus(int adminId, int authUserId);
 
         Task<ServiceResponse<List<CartItem>>> GetCustomerCartItems(int customerId);
         Task<ServiceResponse> AddCartItem(AddCartItemDto addCartItemDto, int customerId);

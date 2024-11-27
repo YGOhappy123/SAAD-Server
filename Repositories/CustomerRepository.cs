@@ -117,9 +117,9 @@ namespace milktea_server.Repositories
             if (queryObject.Limit.HasValue)
                 query = query.Take(queryObject.Limit.Value);
 
-            var orders = await query.ToListAsync();
+            var customers = await query.ToListAsync();
 
-            return (orders, total);
+            return (customers, total);
         }
 
         public async Task AddCustomer(Customer customer)

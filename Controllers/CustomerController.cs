@@ -42,7 +42,7 @@ namespace milktea_server.Controllers
                 {
                     Data = new
                     {
-                        Customer = result.Data,
+                        Customers = result.Data,
                         result.Total,
                         result.Took,
                     },

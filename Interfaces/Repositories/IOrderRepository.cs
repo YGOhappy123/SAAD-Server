@@ -17,5 +17,6 @@ namespace milktea_server.Interfaces.Repositories
         Task<List<Order>> GetCustomerOrders(int customerId, string? sortByJson);
         Task UpdateOrder(Order order);
         Task<int> CountCustomerOrders(int customerId, string timeUnit);
+        Task RejectAllOrdersProcessedByStaff(int staffId);
     }
 }

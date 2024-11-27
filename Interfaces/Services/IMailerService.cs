@@ -16,13 +16,20 @@ namespace milktea_server.Interfaces.Services
             string changePasswordUrl,
             string locale
         );
-
         Task SendOrderConfirmationEmail(
             string emailTo,
             string fullname,
             string orderId,
             string manageOrdersUrl,
             string acceptedAt,
+            string locale
+        );
+        Task SendWelcomeNewAdminEmail(
+            string emailTo,
+            string fullname,
+            string username,
+            string password,
+            string changePasswordUrl,
             string locale
         );
     }

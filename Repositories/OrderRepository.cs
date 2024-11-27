@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using milktea_server.Data;
 using milktea_server.Enums;
@@ -171,6 +172,21 @@ namespace milktea_server.Repositories
                     od.CustomerId == customerId && od.CreatedAt >= startTime && od.CreatedAt <= endTime && od.Status == OrderStatus.Done
                 )
                 .CountAsync();
+        }
+
+        public async Task RejectAllOrdersProcessedByStaff(int staffId)
+        {
+            var orders = await _dbContext
+                .Orders.Where(od => od.Status == OrderStatus.Accepted && od.ProcessingStaffId == staffId)
+                .ToListAsync();
+
+            foreach (var order in orders)
+            {
+                order.Status = OrderStatus.Rejected;
+                order.RejectionReason = "Nhân viên này không còn làm việc tại PMT";
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

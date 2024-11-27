@@ -11,6 +11,7 @@ namespace milktea_server.Utilities
         public const string SIGN_UP_SUCCESSFULLY = "SIGN_UP_SUCCESSFULLY";
         public const string REFRESH_TOKEN_SUCCESSFULLY = "REFRESH_TOKEN_SUCCESSFULLY";
         public const string DEACTIVATE_ACCOUNT_SUCCESSFULLY = "DEACTIVATE_ACCOUNT_SUCCESSFULLY";
+        public const string REACTIVATE_ACCOUNT_SUCCESSFULLY = "REACTIVATE_ACCOUNT_SUCCESSFULLY";
         public const string RESET_PASSWORD_EMAIL_SENT = "RESET_PASSWORD_EMAIL_SENT";
         public const string CHANGE_PASSWORD_SUCCESSFULLY = "CHANGE_PASSWORD_SUCCESSFULLY";
         public const string RESET_PASSWORD_SUCCESSFULLY = "RESET_PASSWORD_SUCCESSFULLY";
@@ -24,5 +25,6 @@ namespace milktea_server.Utilities
         public const string UPDATE_CART_SUCCESSFULLY = "UPDATE_CART_SUCCESSFULLY";
         public const string REMOVE_FROM_CART_SUCCESSFULLY = "REMOVE_FROM_CART_SUCCESSFULLY";
         public const string RESET_CART_SUCCESSFULLY = "RESET_CART_SUCCESSFULLY";
+        public const string CREATE_ADMIN_SUCCESSFULLY = "CREATE_ADMIN_SUCCESSFULLY";
     }
 }
