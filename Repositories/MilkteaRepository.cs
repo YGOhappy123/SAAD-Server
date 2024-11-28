@@ -103,7 +103,50 @@ namespace milktea_server.Repositories
 
         public async Task<Milktea?> GetMilkteaById(int milkteaId)
         {
-            return await _dbContext.Milkteas.Where(mt => mt.IsActive && mt.Id == milkteaId).FirstOrDefaultAsync();
+            return await _dbContext.Milkteas.Where(mt => mt.Id == milkteaId).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Milktea>> SearchMilkteasByName(string searchTerm)
+        {
+            return await _dbContext
+                .Milkteas.Where(mt => mt.IsActive && mt.IsAvailable && (mt.NameVi.Contains(searchTerm) || mt.NameEn.Contains(searchTerm)))
+                .ToListAsync();
+        }
+
+        public async Task<Milktea?> GetMilkteaByName(string nameVi, string nameEn)
+        {
+            return await _dbContext
+                .Milkteas.Where(mt =>
+                    mt.NameVi.Equals(nameVi, StringComparison.OrdinalIgnoreCase)
+                    || mt.NameEn.Equals(nameEn, StringComparison.OrdinalIgnoreCase)
+                )
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task AddMilktea(Milktea milktea)
+        {
+            _dbContext.Milkteas.Add(milktea);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateMilktea(Milktea milktea)
+        {
+            _dbContext.Milkteas.Update(milktea);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DisableMilkteasRelatedToCategory(int categoryId)
+        {
+            var milkteas = await _dbContext.Milkteas.Where(mt => mt.CategoryId == categoryId).ToListAsync();
+
+            foreach (var milktea in milkteas)
+            {
+                milktea.IsActive = false;
+                milktea.IsAvailable = false;
+
+                _dbContext.Milkteas.Update(milktea);
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }

@@ -57,7 +57,7 @@ namespace milktea_server.Services
                 foreach (var item in createOrderDto.Items)
                 {
                     var milktea = await _milkteaRepo.GetMilkteaById(item.MilkteaId);
-                    if (milktea == null || !milktea.IsAvailable)
+                    if (milktea == null || !milktea.IsActive || !milktea.IsAvailable)
                     {
                         throw new Exception(ErrorMessage.PRODUCT_NOT_FOUND_OR_UNAVAILABLE);
                     }
@@ -81,7 +81,7 @@ namespace milktea_server.Services
                     foreach (var toppingId in item.Toppings)
                     {
                         var topping = await _toppingRepo.GetToppingById(toppingId);
-                        if (topping == null || !topping.IsAvailable)
+                        if (topping == null || !topping.IsActive || !topping.IsAvailable)
                         {
                             throw new Exception(ErrorMessage.PRODUCT_NOT_FOUND_OR_UNAVAILABLE);
                         }

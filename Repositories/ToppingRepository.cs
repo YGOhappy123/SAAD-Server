@@ -103,7 +103,29 @@ namespace milktea_server.Repositories
 
         public async Task<Topping?> GetToppingById(int toppingId)
         {
-            return await _dbContext.Toppings.Where(tp => tp.IsActive && tp.Id == toppingId).FirstOrDefaultAsync();
+            return await _dbContext.Toppings.Where(tp => tp.Id == toppingId).FirstOrDefaultAsync();
+        }
+
+        public async Task<Topping?> GetToppingByName(string nameVi, string nameEn)
+        {
+            return await _dbContext
+                .Toppings.Where(tp =>
+                    tp.NameVi.Equals(nameVi, StringComparison.OrdinalIgnoreCase)
+                    || tp.NameEn.Equals(nameEn, StringComparison.OrdinalIgnoreCase)
+                )
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task AddTopping(Topping topping)
+        {
+            _dbContext.Toppings.Add(topping);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateTopping(Topping topping)
+        {
+            _dbContext.Toppings.Update(topping);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

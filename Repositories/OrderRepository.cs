@@ -174,6 +174,23 @@ namespace milktea_server.Repositories
                 .CountAsync();
         }
 
+        public async Task<int> CountMilkteaSoldUnits(int milkteaId, string timeUnit)
+        {
+            var currentTime = TimestampHandler.GetNow();
+            var startTime = TimestampHandler.GetStartOfTimeByType(currentTime, timeUnit);
+            var endTime = TimestampHandler.GetEndOfTimeByType(currentTime, timeUnit);
+
+            return await _dbContext
+                .OrderItems.Include(oi => oi.Order)
+                .Where(oi =>
+                    oi.MilkteaId == milkteaId
+                    && oi.Order!.CreatedAt >= startTime
+                    && oi.Order!.CreatedAt <= endTime
+                    && oi.Order!.Status == OrderStatus.Done
+                )
+                .SumAsync(oi => oi.Quantity);
+        }
+
         public async Task RejectAllOrdersProcessedByStaff(int staffId)
         {
             var orders = await _dbContext

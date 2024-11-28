@@ -11,5 +11,10 @@ namespace milktea_server.Interfaces.Repositories
     {
         Task<(List<Milktea>, int)> GetAllMilkteas(BaseQueryObject queryObject);
         Task<Milktea?> GetMilkteaById(int milkteaId);
+        Task<Milktea?> GetMilkteaByName(string nameVi, string nameEn);
+        Task<List<Milktea>> SearchMilkteasByName(string searchTerm);
+        Task AddMilktea(Milktea milktea);
+        Task UpdateMilktea(Milktea milktea);
+        Task DisableMilkteasRelatedToCategory(int categoryId);
     }
 }

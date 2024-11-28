@@ -79,5 +79,40 @@ namespace milktea_server.Repositories
             _dbContext.CartItems.RemoveRange(cartItems);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task RemoveCartItemsRelatedToCategory(int categoryId)
+        {
+            var cartItems = await _dbContext
+                .CartItems.Include(ci => ci.Milktea)
+                .Where(ci => ci.Milktea != null && ci.Milktea.CategoryId == categoryId)
+                .ToListAsync();
+
+            _dbContext.CartItems.RemoveRange(cartItems);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveCartItemsRelatedToMilktea(int milkteaId)
+        {
+            var cartItems = await _dbContext.CartItems.Where(ci => ci.MilkteaId == milkteaId).ToListAsync();
+
+            _dbContext.CartItems.RemoveRange(cartItems);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveCartItemsRelatedToTopping(int toppingId)
+        {
+            var cartItemIds = await _dbContext
+                .CartItemToppings.Where(cit => cit.ToppingId == toppingId)
+                .Select(cit => cit.CartItemId)
+                .ToListAsync();
+
+            if (cartItemIds.Count != 0)
+            {
+                var cartItems = await _dbContext.CartItems.Where(ci => cartItemIds.Contains(ci.Id)).ToListAsync();
+
+                _dbContext.CartItems.RemoveRange(cartItems);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

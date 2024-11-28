@@ -96,5 +96,32 @@ namespace milktea_server.Repositories
 
             return (categories, total);
         }
+
+        public async Task<Category?> GetCategoryById(int categoryId)
+        {
+            return await _dbContext.Categories.Where(c => c.Id == categoryId).SingleOrDefaultAsync();
+        }
+
+        public async Task<Category?> GetCategoryByName(string nameVi, string nameEn)
+        {
+            return await _dbContext
+                .Categories.Where(c =>
+                    c.NameVi.Equals(nameVi, StringComparison.OrdinalIgnoreCase)
+                    || c.NameEn.Equals(nameEn, StringComparison.OrdinalIgnoreCase)
+                )
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task AddCategory(Category category)
+        {
+            _dbContext.Categories.Add(category);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateCategory(Category category)
+        {
+            _dbContext.Categories.Update(category);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

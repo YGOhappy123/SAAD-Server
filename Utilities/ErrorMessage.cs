@@ -21,6 +21,11 @@ namespace milktea_server.Utilities
         public const string DELETE_IMAGE_FAILED = "DELETE_IMAGE_FAILED";
         public const string NO_PERMISSION = "NO_PERMISSION";
         public const string CREATE_ORDER_FAILED = "CREATE_ORDER_FAILED";
+        public const string CATEGORY_NOT_FOUND = "CATEGORY_NOT_FOUND";
+        public const string PRODUCT_NOT_FOUND = "PRODUCT_NOT_FOUND";
+        public const string CATEGORY_NOT_FOUND_OR_UNAVAILABLE = "CATEGORY_NOT_FOUND_OR_UNAVAILABLE";
         public const string PRODUCT_NOT_FOUND_OR_UNAVAILABLE = "PRODUCT_NOT_FOUND_OR_UNAVAILABLE";
+        public const string DUPLICATE_CATEGORY_NAME = "DUPLICATE_CATEGORY_NAME";
+        public const string DUPLICATE_PRODUCT_NAME = "DUPLICATE_PRODUCT_NAME";
     }
 }

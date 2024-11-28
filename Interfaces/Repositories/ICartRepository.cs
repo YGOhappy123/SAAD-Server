@@ -15,5 +15,8 @@ namespace milktea_server.Interfaces.Repositories
         Task UpdateCartItem(CartItem cartItem);
         Task RemoveCartItem(CartItem cartItem);
         Task ResetCart(int customerId);
+        Task RemoveCartItemsRelatedToCategory(int categoryId);
+        Task RemoveCartItemsRelatedToMilktea(int milkteaId);
+        Task RemoveCartItemsRelatedToTopping(int toppingId);
     }
 }
