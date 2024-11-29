@@ -205,5 +205,25 @@ namespace milktea_server.Repositories
 
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<int> CountNewOrdersInTimeRange(DateTime startTime, DateTime endTime)
+        {
+            return await _dbContext.Orders.Where(od => od.CreatedAt >= startTime && od.CreatedAt < endTime).CountAsync();
+        }
+
+        public async Task<decimal> CountTotalRevenuesInTimeRange(DateTime startTime, DateTime endTime)
+        {
+            return await _dbContext
+                .Orders.Where(od => od.CreatedAt >= startTime && od.CreatedAt < endTime && od.Status == OrderStatus.Done)
+                .SumAsync(od => od.TotalPrice);
+        }
+
+        public async Task<List<Order>> GetAllOrdersInTimeRange(DateTime startTime, DateTime endTime)
+        {
+            return await _dbContext
+                .Orders.Include(od => od.Items)
+                .Where(od => od.CreatedAt >= startTime && od.CreatedAt < endTime && od.Status == OrderStatus.Done)
+                .ToListAsync();
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using milktea_server.Data;
+using milktea_server.Enums;
 using milktea_server.Interfaces.Repositories;
 using milktea_server.Models;
 using milktea_server.Queries;
@@ -132,6 +133,35 @@ namespace milktea_server.Repositories
         {
             _dbContext.Customers.Update(customer);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> CountCustomersCreatedInTimeRange(DateTime startTime, DateTime endTime)
+        {
+            return await _dbContext.Customers.Where(cus => cus.CreatedAt >= startTime && cus.CreatedAt < endTime).CountAsync();
+        }
+
+        public async Task<List<Customer>> GetNewestCustomers(DateTime startTime, DateTime endTime, int limit)
+        {
+            return await _dbContext
+                .Customers.Where(cus => cus.CreatedAt >= startTime && cus.CreatedAt < endTime)
+                .OrderByDescending(cus => cus.CreatedAt)
+                .Take(limit)
+                .ToListAsync();
+        }
+
+        public async Task<List<Customer>> GetCustomersWithHighestTotalOrderValue(DateTime startTime, DateTime endTime, int limit)
+        {
+            var orderIds = await _dbContext
+                .Orders.Where(od => od.CreatedAt >= startTime && od.CreatedAt < endTime && od.Status == OrderStatus.Done)
+                .Select(od => od.Id)
+                .ToListAsync();
+
+            return await _dbContext
+                .Customers.Include(cus => cus.Orders.Where(od => orderIds.Contains(od.Id)))
+                .Where(cus => cus.Orders.Any(od => orderIds.Contains(od.Id)))
+                .OrderByDescending(cus => cus.Orders.Sum(oi => oi.TotalPrice))
+                .Take(limit)
+                .ToListAsync();
         }
     }
 }

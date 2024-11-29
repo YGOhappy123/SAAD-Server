@@ -18,5 +18,6 @@ namespace milktea_server.Models
         public decimal? PriceL { get; set; }
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = [];
     }
 }

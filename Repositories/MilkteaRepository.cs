@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using milktea_server.Data;
+using milktea_server.Enums;
 using milktea_server.Interfaces.Repositories;
 using milktea_server.Models;
 using milktea_server.Queries;
@@ -147,6 +148,40 @@ namespace milktea_server.Repositories
                 _dbContext.Milkteas.Update(milktea);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<Milktea>> GetBestSellers(DateTime startTime, DateTime endTime, int limit)
+        {
+            var orderItemIds = await _dbContext
+                .OrderItems.Where(oi =>
+                    oi.Order!.CreatedAt >= startTime && oi.Order!.CreatedAt < endTime && oi.Order!.Status == OrderStatus.Done
+                )
+                .Select(oi => oi.Id)
+                .ToListAsync();
+
+            return await _dbContext
+                .Milkteas.Include(mt => mt.OrderItems.Where(oi => orderItemIds.Contains(oi.Id)))
+                .Where(mt => mt.OrderItems.Any(oi => orderItemIds.Contains(oi.Id)))
+                .OrderByDescending(mt => mt.OrderItems.Sum(oi => oi.Quantity * oi.Price))
+                .Take(limit)
+                .ToListAsync();
+        }
+
+        public async Task<(int, decimal)> GetMilkteaStatisticInTimeRange(DateTime startTime, DateTime endTime, int milkteaId)
+        {
+            var orderItemIds = await _dbContext
+                .OrderItems.Where(oi =>
+                    oi.Order!.CreatedAt >= startTime && oi.Order!.CreatedAt < endTime && oi.Order!.Status == OrderStatus.Done
+                )
+                .Select(oi => oi.Id)
+                .ToListAsync();
+
+            var milktea = await _dbContext
+                .Milkteas.Include(mt => mt.OrderItems.Where(oi => orderItemIds.Contains(oi.Id)))
+                .Where(mt => mt.OrderItems.Any(oi => orderItemIds.Contains(oi.Id)) && mt.Id == milkteaId)
+                .SingleOrDefaultAsync();
+
+            return (milktea?.OrderItems.Sum(oi => oi.Quantity) ?? 0, milktea?.OrderItems.Sum(oi => oi.Quantity * oi.Price) ?? 0);
         }
     }
 }

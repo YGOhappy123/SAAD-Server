@@ -19,5 +19,8 @@ namespace milktea_server.Interfaces.Repositories
         Task<int> CountCustomerOrders(int customerId, string timeUnit);
         Task<int> CountMilkteaSoldUnits(int milkteaId, string timeUnit);
         Task RejectAllOrdersProcessedByStaff(int staffId);
+        Task<int> CountNewOrdersInTimeRange(DateTime startTime, DateTime endTime);
+        Task<decimal> CountTotalRevenuesInTimeRange(DateTime startTime, DateTime endTime);
+        Task<List<Order>> GetAllOrdersInTimeRange(DateTime startTime, DateTime endTime);
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using milktea_server.Dtos.Response;
+using milktea_server.Interfaces.Services;
 
 namespace milktea_server.Controllers
 {
@@ -11,32 +13,63 @@ namespace milktea_server.Controllers
     [Route("/statistic")]
     public class StatisticController : ControllerBase
     {
+        private readonly IStatisticService _statisticService;
+
+        public StatisticController(IStatisticService statisticService)
+        {
+            _statisticService = statisticService;
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpGet("")]
-        public async Task<IActionResult> GetOverallStatistic()
+        public async Task<IActionResult> GetSummaryStatistic([FromQuery] string type)
         {
-            return Ok();
+            var result = await _statisticService.GetSummaryStatistic(type);
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data });
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("/popular")]
-        public async Task<IActionResult> GetPopularStatistic()
+        [HttpGet("popular")]
+        public async Task<IActionResult> GetPopularStatistic([FromQuery] string type)
         {
-            return Ok();
+            var result = await _statisticService.GetPopularStatistic(type);
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data });
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("/revenues")]
-        public async Task<IActionResult> GetRevenuesStatistic()
+        [HttpGet("revenues")]
+        public async Task<IActionResult> GetRevenuesChart([FromQuery] string type, [FromQuery] string locale)
         {
-            return Ok();
+            var result = await _statisticService.GetRevenuesChart(type, locale);
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data });
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("/products/{productId:int}")]
-        public async Task<IActionResult> GetProductStatistic()
+        [HttpGet("products/{milkteaId:int}")]
+        public async Task<IActionResult> GetProductStatistic([FromRoute] int milkteaId)
         {
-            return Ok();
+            var result = await _statisticService.GetProductStatistic(milkteaId);
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data });
         }
     }
 }

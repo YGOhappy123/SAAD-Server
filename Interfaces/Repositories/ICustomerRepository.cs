@@ -15,5 +15,8 @@ namespace milktea_server.Interfaces.Repositories
         Task<(List<Customer>, int)> GetAllCustomers(BaseQueryObject queryObject);
         Task AddCustomer(Customer customer);
         Task UpdateCustomer(Customer customer);
+        Task<int> CountCustomersCreatedInTimeRange(DateTime startTime, DateTime endTime);
+        Task<List<Customer>> GetNewestCustomers(DateTime startTime, DateTime endTime, int limit);
+        Task<List<Customer>> GetCustomersWithHighestTotalOrderValue(DateTime startTime, DateTime endTime, int limit);
     }
 }

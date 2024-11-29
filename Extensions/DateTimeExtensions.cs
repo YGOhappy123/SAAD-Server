@@ -37,5 +37,17 @@ namespace milktea_server.Extensions
         {
             return DateTime.DaysInMonth(timestamp.Year, timestamp.Month);
         }
+
+        public static DateTime AddByUnitAndAmount(this DateTime timestamp, int amount, string unit)
+        {
+            return unit.ToLower() switch
+            {
+                "hour" => timestamp.AddHours(amount),
+                "day" => timestamp.AddDays(amount),
+                "month" => timestamp.AddMonths(amount),
+                "year" => timestamp.AddYears(amount),
+                _ => throw new ArgumentException("Invalid type"),
+            };
+        }
     }
 }

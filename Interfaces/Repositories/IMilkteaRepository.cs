@@ -16,5 +16,7 @@ namespace milktea_server.Interfaces.Repositories
         Task AddMilktea(Milktea milktea);
         Task UpdateMilktea(Milktea milktea);
         Task DisableMilkteasRelatedToCategory(int categoryId);
+        Task<List<Milktea>> GetBestSellers(DateTime startTime, DateTime endTime, int limit);
+        Task<(int, decimal)> GetMilkteaStatisticInTimeRange(DateTime startTime, DateTime endTime, int milkteaId);
     }
 }
