@@ -39,12 +39,9 @@ namespace milktea_server.Controllers
                 result.Status,
                 new SuccessResponseDto
                 {
-                    Data = new
-                    {
-                        Categories = result.Data,
-                        result.Total,
-                        result.Took,
-                    },
+                    Data = result.Data,
+                    Took = result.Took,
+                    Total = result.Total,
                 }
             );
         }
@@ -113,7 +110,7 @@ namespace milktea_server.Controllers
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
             }
 
-            return StatusCode(result.Status, new SuccessResponseDto { Data = new { Milkteas = result.Data } });
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data });
         }
 
         [HttpGet("milkteas")]
@@ -129,14 +126,23 @@ namespace milktea_server.Controllers
                 result.Status,
                 new SuccessResponseDto
                 {
-                    Data = new
-                    {
-                        Milkteas = result.Data!.Select(mt => mt.ToMilkteaDto()),
-                        result.Total,
-                        result.Took,
-                    },
+                    Data = result.Data!.Select(mt => mt.ToMilkteaDto()),
+                    Total = result.Total,
+                    Took = result.Took,
                 }
             );
+        }
+
+        [HttpGet("milkteas/{milkteaId:int}")]
+        public async Task<IActionResult> GetAllMilkteaById([FromRoute] int milkteaId)
+        {
+            var result = await _productService.GetAllMilkteaById(milkteaId);
+            if (!result.Success)
+            {
+                return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
+            }
+
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data });
         }
 
         [Authorize(Roles = "Admin")]
@@ -207,12 +213,9 @@ namespace milktea_server.Controllers
                 result.Status,
                 new SuccessResponseDto
                 {
-                    Data = new
-                    {
-                        Toppings = result.Data,
-                        result.Total,
-                        result.Took,
-                    },
+                    Data = result.Data,
+                    Total = result.Total,
+                    Took = result.Took,
                 }
             );
         }

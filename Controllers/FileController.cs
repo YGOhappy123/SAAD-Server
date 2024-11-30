@@ -24,7 +24,7 @@ namespace milktea_server.Controllers
         }
 
         [HttpPost("upload-image")]
-        public async Task<IActionResult> UploadSingleImage([FromForm] UploadImageDto uploadImageDto)
+        public async Task<IActionResult> UploadSingleImage([FromForm] UploadImageDto uploadImageDto, [FromQuery] string? folder)
         {
             if (!ModelState.IsValid)
             {
@@ -34,7 +34,7 @@ namespace milktea_server.Controllers
                 );
             }
 
-            var result = await _fileService.UploadImageToCloudinary(uploadImageDto.File, "ptit-milk-tea");
+            var result = await _fileService.UploadImageToCloudinary(uploadImageDto.File, folder);
             if (!result.Success)
             {
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });

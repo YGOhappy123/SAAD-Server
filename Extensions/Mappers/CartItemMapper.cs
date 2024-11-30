@@ -14,9 +14,9 @@ namespace milktea_server.Extensions.Mappers
             return new CartItemDto
             {
                 Id = cartItem.Id,
-                CustomerId = cartItem.CustomerId,
                 MilkteaId = cartItem.MilkteaId,
                 Size = cartItem.Size.ToString(),
+                Quantity = cartItem.Quantity,
                 Toppings = cartItem.Toppings.Select(tp => tp.ToppingId).OrderBy(tpId => tpId).ToList(),
             };
         }

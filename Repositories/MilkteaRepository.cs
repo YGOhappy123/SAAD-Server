@@ -104,7 +104,7 @@ namespace milktea_server.Repositories
 
         public async Task<Milktea?> GetMilkteaById(int milkteaId)
         {
-            return await _dbContext.Milkteas.Where(mt => mt.Id == milkteaId).FirstOrDefaultAsync();
+            return await _dbContext.Milkteas.Include(mt => mt.Category).Where(mt => mt.Id == milkteaId).FirstOrDefaultAsync();
         }
 
         public async Task<List<Milktea>> SearchMilkteasByName(string searchTerm)

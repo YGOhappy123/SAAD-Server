@@ -45,7 +45,7 @@ namespace milktea_server.Controllers
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
             }
 
-            return StatusCode(result.Status, new SuccessResponseDto { Message = result.Message });
+            return StatusCode(result.Status, new SuccessResponseDto { Message = result.Message, Data = result.Data });
         }
 
         [Authorize(Roles = "Customer")]
@@ -77,12 +77,9 @@ namespace milktea_server.Controllers
                 result.Status,
                 new SuccessResponseDto
                 {
-                    Data = new
-                    {
-                        Orders = result.Data!.Select(or => or.ToOrderDto()),
-                        result.Total,
-                        result.Took,
-                    },
+                    Data = result.Data!.Select(or => or.ToOrderDto()),
+                    Total = result.Total,
+                    Took = result.Took,
                 }
             );
         }
@@ -100,7 +97,7 @@ namespace milktea_server.Controllers
                 return StatusCode(result.Status, new ErrorResponseDto { Message = result.Message });
             }
 
-            return StatusCode(result.Status, new SuccessResponseDto { Data = new { Order = result.Data!.ToOrderDto() } });
+            return StatusCode(result.Status, new SuccessResponseDto { Data = result.Data!.ToOrderDto() });
         }
 
         [Authorize(Roles = "Admin")]

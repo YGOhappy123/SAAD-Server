@@ -18,6 +18,7 @@ namespace milktea_server.Dtos.Product
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public MilkteaPrice? Price { get; set; }
         public CategoryDto? Category { get; set; }
+        public int SoldUnitsThisYear { get; set; } = 0;
     }
 
     public class MilkteaPrice

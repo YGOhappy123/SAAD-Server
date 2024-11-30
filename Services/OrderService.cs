@@ -42,14 +42,14 @@ namespace milktea_server.Services
             _mailerService = mailerService;
         }
 
-        public async Task<ServiceResponse> CreateOrder(CreateOrderDto createOrderDto, int customerId, string locale)
+        public async Task<ServiceResponse<int>> CreateOrder(CreateOrderDto createOrderDto, int customerId, string locale)
         {
             try
             {
                 var newOrder = new Order
                 {
                     CustomerId = customerId,
-                    Note = createOrderDto.Notes,
+                    Note = createOrderDto.Note,
                     Status = OrderStatus.Pending,
                     Items = [],
                 };
@@ -111,16 +111,17 @@ namespace milktea_server.Services
                     );
                 }
 
-                return new ServiceResponse
+                return new ServiceResponse<int>
                 {
                     Status = ResStatusCode.CREATED,
                     Success = true,
                     Message = SuccessMessage.CREATE_ORDER_SUCCESSFULLY,
+                    Data = newOrder.Id,
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceResponse
+                return new ServiceResponse<int>
                 {
                     Status = ResStatusCode.BAD_REQUEST,
                     Success = false,

@@ -19,6 +19,7 @@ namespace milktea_server.Interfaces.Services
 
         Task<ServiceResponse<List<MilkteaWithSales>>> SearchMilkteas(string searchTerm);
         Task<ServiceResponse<List<Milktea>>> GetAllMilkteas(BaseQueryObject queryObject);
+        Task<ServiceResponse<object>> GetAllMilkteaById(int milkteaId);
         Task<ServiceResponse> CreateNewMilktea(CreateUpdateMilkteaDto createMilkteaDto);
         Task<ServiceResponse> UpdateMilktea(CreateUpdateMilkteaDto updateMilkteaDto, int milkteaId);
         Task<ServiceResponse> ToggleMilkteaActiveStatus(int milkteaId);

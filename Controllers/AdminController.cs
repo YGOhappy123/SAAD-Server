@@ -39,12 +39,9 @@ namespace milktea_server.Controllers
                 result.Status,
                 new SuccessResponseDto
                 {
-                    Data = new
-                    {
-                        Admins = result.Data!.Select(ad => ad.ToAdminDto()),
-                        result.Total,
-                        result.Took,
-                    },
+                    Data = result.Data!.Select(ad => ad.ToAdminDto()),
+                    Total = result.Total,
+                    Took = result.Took,
                 }
             );
         }

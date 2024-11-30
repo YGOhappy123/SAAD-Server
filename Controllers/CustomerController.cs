@@ -40,12 +40,9 @@ namespace milktea_server.Controllers
                 result.Status,
                 new SuccessResponseDto
                 {
-                    Data = new
-                    {
-                        Customers = result.Data,
-                        result.Total,
-                        result.Took,
-                    },
+                    Data = result.Data,
+                    Total = result.Total,
+                    Took = result.Took,
                 }
             );
         }

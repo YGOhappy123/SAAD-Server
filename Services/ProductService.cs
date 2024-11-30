@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using milktea_server.Dtos.Product;
 using milktea_server.Dtos.Response;
 using milktea_server.Dtos.Statistic;
+using milktea_server.Extensions.Mappers;
 using milktea_server.Interfaces.Repositories;
 using milktea_server.Interfaces.Services;
 using milktea_server.Models;
@@ -191,6 +193,34 @@ namespace milktea_server.Services
                 Data = milkteas,
                 Total = total,
                 Took = milkteas.Count,
+            };
+        }
+
+        public async Task<ServiceResponse<object>> GetAllMilkteaById(int milkteaId)
+        {
+            var milktea = await _milkteaRepo.GetMilkteaById(milkteaId);
+            if (milktea == null || !milktea.IsActive)
+            {
+                return new ServiceResponse<object>
+                {
+                    Status = ResStatusCode.NOT_FOUND,
+                    Success = false,
+                    Message = ErrorMessage.PRODUCT_NOT_FOUND,
+                };
+            }
+
+            var currentTime = TimestampHandler.GetNow();
+            var startOfCurrentTime = TimestampHandler.GetStartOfTimeByType(currentTime, "yearly");
+            var statisticThisYear = await _milkteaRepo.GetMilkteaStatisticInTimeRange(startOfCurrentTime, currentTime, milkteaId);
+
+            var milkteaDto = milktea.ToMilkteaDto();
+            milkteaDto.SoldUnitsThisYear = statisticThisYear.Item1;
+
+            return new ServiceResponse<object>
+            {
+                Status = ResStatusCode.OK,
+                Success = true,
+                Data = milkteaDto,
             };
         }
 

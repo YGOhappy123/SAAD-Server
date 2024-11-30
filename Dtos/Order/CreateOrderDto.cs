@@ -9,7 +9,7 @@ namespace milktea_server.Dtos.Order
 {
     public class CreateOrderDto
     {
-        public string? Notes { get; set; } = string.Empty;
+        public string? Note { get; set; } = string.Empty;
         public List<CreateOrderItemDto> Items { get; set; } = [];
     }
 

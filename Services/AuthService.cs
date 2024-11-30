@@ -193,7 +193,7 @@ namespace milktea_server.Services
             await _mailerService.SendResetPasswordEmail(
                 forgotPasswordDto.Email,
                 $"{existedCustomer.LastName} {existedCustomer.FirstName}",
-                $"{_configuration["Application:ClientUrl"]}?token={_jwtService.GenerateResetPasswordToken(existedCustomer)}",
+                $"{_configuration["Application:ClientUrl"]}/auth?type=reset&token={_jwtService.GenerateResetPasswordToken(existedCustomer)}",
                 locale
             );
 
@@ -205,9 +205,9 @@ namespace milktea_server.Services
             };
         }
 
-        public async Task<ServiceResponse> ResetPassword(string resetPasswordToken, ResetPasswordDto resetPasswordDto)
+        public async Task<ServiceResponse> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
-            if (_jwtService.VerifyResetPasswordToken(resetPasswordToken, out var principal))
+            if (_jwtService.VerifyResetPasswordToken(resetPasswordDto.ResetPasswordToken, out var principal))
             {
                 var email = principal!.FindFirst(ClaimTypes.Email)!.Value;
                 var account = await _accountRepo.GetCustomerAccountByEmail(email);
