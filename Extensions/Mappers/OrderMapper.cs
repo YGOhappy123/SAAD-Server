@@ -20,6 +20,7 @@ namespace milktea_server.Extensions.Mappers
                 Status = order.Status.ToString(),
                 CreatedAt = order.CreatedAt,
                 UpdatedAt = order.UpdatedAt,
+                ProcessingStaffId = order.ProcessingStaffId,
                 Customer =
                     order.Customer != null
                         ? new OrderUserDto

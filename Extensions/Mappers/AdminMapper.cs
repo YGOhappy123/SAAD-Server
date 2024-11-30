@@ -17,10 +17,12 @@ namespace milktea_server.Extensions.Mappers
                 FirstName = admin.FirstName,
                 LastName = admin.LastName,
                 Email = admin.Email,
+                PhoneNumber = admin.PhoneNumber,
                 Avatar = admin.Avatar,
                 CreatedAt = admin.CreatedAt,
-                CreatedById = admin.CreatedBy == null ? null : admin.CreatedBy.Id,
+                CreatedById = admin.CreatedBy?.Id,
                 CreatedBy = admin.CreatedBy == null ? null : $"{admin.CreatedBy.LastName} {admin.CreatedBy.FirstName}",
+                IsActive = admin.Account?.IsActive,
             };
         }
     }

@@ -46,7 +46,7 @@ namespace milktea_server.Repositories
                             query = query.Where(m => m.NameEn.Contains(value));
                             break;
                         default:
-                            query = query.Where(m => EF.Property<string>(m, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(m => EF.Property<string>(m, filter.Key.CapitalizeWord()) == value);
                             break;
                     }
                 }
@@ -61,8 +61,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(m => EF.Property<object>(m, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(m => EF.Property<object>(m, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(m => EF.Property<object>(m, order.Key.CapitalizeWord()))
+                        : query.OrderByDescending(m => EF.Property<object>(m, order.Key.CapitalizeWord()));
             }
 
             return query;
@@ -102,14 +102,9 @@ namespace milktea_server.Repositories
             return await _dbContext.Categories.Where(c => c.Id == categoryId).SingleOrDefaultAsync();
         }
 
-        public async Task<Category?> GetCategoryByName(string nameVi, string nameEn)
+        public async Task<List<Category>> GetCategoriesByName(string nameVi, string nameEn)
         {
-            return await _dbContext
-                .Categories.Where(c =>
-                    c.NameVi.Equals(nameVi, StringComparison.OrdinalIgnoreCase)
-                    || c.NameEn.Equals(nameEn, StringComparison.OrdinalIgnoreCase)
-                )
-                .SingleOrDefaultAsync();
+            return await _dbContext.Categories.Where(c => c.NameVi == nameVi || c.NameEn == nameEn).ToListAsync();
         }
 
         public async Task AddCategory(Category category)

@@ -47,7 +47,7 @@ namespace milktea_server.Repositories
                             query = query.Where(ad => ad.FirstName.Contains(value) || ad.LastName.Contains(value));
                             break;
                         default:
-                            query = query.Where(ad => EF.Property<string>(ad, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(ad => EF.Property<string>(ad, filter.Key.CapitalizeWord()) == value);
                             break;
                     }
                 }
@@ -62,8 +62,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(ad => EF.Property<object>(ad, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(ad => EF.Property<object>(ad, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(ad => EF.Property<object>(ad, order.Key.CapitalizeWord()))
+                        : query.OrderByDescending(ad => EF.Property<object>(ad, order.Key.CapitalizeWord()));
             }
 
             return query;
@@ -115,7 +115,7 @@ namespace milktea_server.Repositories
 
         public async Task<(List<Admin>, int)> GetAllAdmins(BaseQueryObject queryObject)
         {
-            var query = _dbContext.Admins.Include(ad => ad.CreatedBy).AsQueryable();
+            var query = _dbContext.Admins.Include(ad => ad.Account).Include(ad => ad.CreatedBy).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(queryObject.Filter))
             {

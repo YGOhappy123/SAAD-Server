@@ -50,7 +50,7 @@ namespace milktea_server.Repositories
                             query = query.Where(tp => tp.Price <= Convert.ToDecimal(value));
                             break;
                         default:
-                            query = query.Where(tp => EF.Property<string>(tp, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(tp => EF.Property<string>(tp, filter.Key.CapitalizeWord()) == value);
                             break;
                     }
                 }
@@ -65,8 +65,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(tp => EF.Property<object>(tp, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(tp => EF.Property<object>(tp, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(tp => EF.Property<object>(tp, order.Key.CapitalizeWord()))
+                        : query.OrderByDescending(tp => EF.Property<object>(tp, order.Key.CapitalizeWord()));
             }
 
             return query;
@@ -106,14 +106,9 @@ namespace milktea_server.Repositories
             return await _dbContext.Toppings.Where(tp => tp.Id == toppingId).FirstOrDefaultAsync();
         }
 
-        public async Task<Topping?> GetToppingByName(string nameVi, string nameEn)
+        public async Task<List<Topping>> GetToppingsByName(string nameVi, string nameEn)
         {
-            return await _dbContext
-                .Toppings.Where(tp =>
-                    tp.NameVi.Equals(nameVi, StringComparison.OrdinalIgnoreCase)
-                    || tp.NameEn.Equals(nameEn, StringComparison.OrdinalIgnoreCase)
-                )
-                .SingleOrDefaultAsync();
+            return await _dbContext.Toppings.Where(tp => tp.NameVi == nameVi || tp.NameEn == nameEn).ToListAsync();
         }
 
         public async Task AddTopping(Topping topping)

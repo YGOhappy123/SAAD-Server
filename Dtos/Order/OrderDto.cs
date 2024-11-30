@@ -13,6 +13,7 @@ namespace milktea_server.Dtos.Order
         public string? Note { get; set; }
         public string? RejectionReason { get; set; }
         public string Status { get; set; } = OrderStatus.Pending.ToString();
+        public int? ProcessingStaffId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public OrderUserDto? Customer { get; set; }

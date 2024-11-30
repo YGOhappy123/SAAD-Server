@@ -18,5 +18,6 @@ namespace milktea_server.Dtos.Statistic
         public string? Address { get; set; }
         public int? TotalOrdersThisMonth { get; set; } = 0;
         public int? TotalOrdersThisYear { get; set; } = 0;
+        public bool? IsActive { get; set; } = true;
     }
 }

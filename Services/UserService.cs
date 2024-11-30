@@ -67,6 +67,7 @@ namespace milktea_server.Services
                         Address = cus.Address,
                         TotalOrdersThisMonth = totalOrdersThisMonth,
                         TotalOrdersThisYear = totalOrdersThisYear,
+                        IsActive = cus.Account != null && cus.Account.IsActive,
                     }
                 );
             }
@@ -102,15 +103,8 @@ namespace milktea_server.Services
                 targetCustomer.Avatar = updateCustomerDto.Avatar;
             }
 
-            if (!string.IsNullOrEmpty(updateCustomerDto.Address))
-            {
-                targetCustomer.Address = updateCustomerDto.Address;
-            }
-
-            if (!string.IsNullOrEmpty(updateCustomerDto.PhoneNumber))
-            {
-                targetCustomer.PhoneNumber = updateCustomerDto.PhoneNumber;
-            }
+            targetCustomer.Address = string.IsNullOrEmpty(updateCustomerDto.Address) ? null : updateCustomerDto.Address;
+            targetCustomer.PhoneNumber = string.IsNullOrEmpty(updateCustomerDto.PhoneNumber) ? null : updateCustomerDto.PhoneNumber;
 
             if (!string.IsNullOrEmpty(updateCustomerDto.Email))
             {
@@ -126,6 +120,10 @@ namespace milktea_server.Services
                 }
 
                 targetCustomer.Email = updateCustomerDto.Email;
+            }
+            else
+            {
+                targetCustomer.Email = null;
             }
 
             await _customerRepo.UpdateCustomer(targetCustomer);
@@ -193,7 +191,9 @@ namespace milktea_server.Services
                 LastName = createAdminDto.LastName,
                 Email = createAdminDto.Email,
                 PhoneNumber = createAdminDto.PhoneNumber,
-                Avatar = _configuration["Application:DefaultUserAvatar"],
+                Avatar = string.IsNullOrWhiteSpace(createAdminDto.Avatar)
+                    ? _configuration["Application:DefaultUserAvatar"]
+                    : createAdminDto.Avatar,
                 AccountId = newAccount.Id,
                 CreatedById = authUserId,
             };
@@ -237,21 +237,18 @@ namespace milktea_server.Services
                 targetAdmin.Avatar = updateAdminDto.Avatar;
             }
 
-            if (!string.IsNullOrEmpty(updateAdminDto.PhoneNumber))
+            var adminWithThisPhoneNumber = await _adminRepo.GetAdminByPhoneNumber(updateAdminDto.PhoneNumber);
+            if (adminWithThisPhoneNumber != null && adminWithThisPhoneNumber.Id != adminId)
             {
-                var adminWithThisPhoneNumber = await _adminRepo.GetAdminByPhoneNumber(updateAdminDto.PhoneNumber);
-                if (adminWithThisPhoneNumber != null && adminWithThisPhoneNumber.Id != adminId)
+                return new ServiceResponse
                 {
-                    return new ServiceResponse
-                    {
-                        Status = ResStatusCode.CONFLICT,
-                        Success = false,
-                        Message = ErrorMessage.PHONE_NUMBER_EXISTED,
-                    };
-                }
-
-                targetAdmin.PhoneNumber = updateAdminDto.PhoneNumber;
+                    Status = ResStatusCode.CONFLICT,
+                    Success = false,
+                    Message = ErrorMessage.PHONE_NUMBER_EXISTED,
+                };
             }
+
+            targetAdmin.PhoneNumber = updateAdminDto.PhoneNumber;
 
             await _adminRepo.UpdateAdmin(targetAdmin);
 

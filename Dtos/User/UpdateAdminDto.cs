@@ -14,6 +14,9 @@ namespace milktea_server.Dtos.User
         [Required]
         public string LastName { get; set; } = string.Empty;
         public string? Avatar { get; set; }
-        public string? PhoneNumber { get; set; }
+
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

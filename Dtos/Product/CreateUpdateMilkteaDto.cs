@@ -21,14 +21,8 @@ namespace milktea_server.Dtos.Product
         [Required]
         public string DescriptionEn { get; set; } = string.Empty;
         public string? Image { get; set; }
-
-        [CustomPriceValidation]
         public decimal? PriceS { get; set; }
-
-        [CustomPriceValidation]
         public decimal? PriceM { get; set; }
-
-        [CustomPriceValidation]
         public decimal? PriceL { get; set; }
         public int CategoryId { get; set; }
         public bool IsAvailable { get; set; } = true;

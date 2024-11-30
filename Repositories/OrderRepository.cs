@@ -49,7 +49,7 @@ namespace milktea_server.Repositories
                             query = query.Where(od => od.Customer!.FirstName.Contains(value) || od.Customer!.LastName.Contains(value));
                             break;
                         default:
-                            query = query.Where(od => EF.Property<string>(od, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(od => EF.Property<string>(od, filter.Key.CapitalizeWord()) == value);
                             break;
                     }
                 }
@@ -64,8 +64,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(od => EF.Property<object>(od, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(od => EF.Property<object>(od, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(od => EF.Property<object>(od, order.Key.CapitalizeWord()))
+                        : query.OrderByDescending(od => EF.Property<object>(od, order.Key.CapitalizeWord()));
             }
 
             return query;

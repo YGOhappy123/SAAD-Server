@@ -11,7 +11,7 @@ namespace milktea_server.Interfaces.Repositories
     {
         Task<(List<Category>, int)> GetAllCategories(BaseQueryObject queryObject);
         Task<Category?> GetCategoryById(int categoryId);
-        Task<Category?> GetCategoryByName(string nameVi, string nameEn);
+        Task<List<Category>> GetCategoriesByName(string nameVi, string nameEn);
         Task AddCategory(Category category);
         Task UpdateCategory(Category category);
     }

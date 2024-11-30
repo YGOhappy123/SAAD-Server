@@ -51,7 +51,7 @@ namespace milktea_server.Repositories
                             query = query.Where(mt => mt.PriceS <= Convert.ToDecimal(value));
                             break;
                         default:
-                            query = query.Where(mt => EF.Property<string>(mt, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(mt => EF.Property<string>(mt, filter.Key.CapitalizeWord()) == value);
                             break;
                     }
                 }
@@ -66,8 +66,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(mt => EF.Property<object>(mt, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(mt => EF.Property<object>(mt, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(mt => EF.Property<object>(mt, order.Key.CapitalizeWord()))
+                        : query.OrderByDescending(mt => EF.Property<object>(mt, order.Key.CapitalizeWord()));
             }
 
             return query;
@@ -114,14 +114,9 @@ namespace milktea_server.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Milktea?> GetMilkteaByName(string nameVi, string nameEn)
+        public async Task<List<Milktea>> GetMilkteasByName(string nameVi, string nameEn)
         {
-            return await _dbContext
-                .Milkteas.Where(mt =>
-                    mt.NameVi.Equals(nameVi, StringComparison.OrdinalIgnoreCase)
-                    || mt.NameEn.Equals(nameEn, StringComparison.OrdinalIgnoreCase)
-                )
-                .SingleOrDefaultAsync();
+            return await _dbContext.Milkteas.Where(mt => mt.NameVi == nameVi || mt.NameEn == nameEn).ToListAsync();
         }
 
         public async Task AddMilktea(Milktea milktea)

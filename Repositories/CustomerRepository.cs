@@ -51,7 +51,7 @@ namespace milktea_server.Repositories
                             query = query.Where(cus => cus.FirstName.Contains(value) || cus.LastName.Contains(value));
                             break;
                         default:
-                            query = query.Where(cus => EF.Property<string>(cus, filter.Key.CapitalizeEachWords()) == value);
+                            query = query.Where(cus => EF.Property<string>(cus, filter.Key.CapitalizeWord()) == value);
                             break;
                     }
                 }
@@ -66,8 +66,8 @@ namespace milktea_server.Repositories
             {
                 query =
                     order.Value == "ASC"
-                        ? query.OrderBy(cus => EF.Property<object>(cus, order.Key.CapitalizeEachWords()))
-                        : query.OrderByDescending(cus => EF.Property<object>(cus, order.Key.CapitalizeEachWords()));
+                        ? query.OrderBy(cus => EF.Property<object>(cus, order.Key.CapitalizeWord()))
+                        : query.OrderByDescending(cus => EF.Property<object>(cus, order.Key.CapitalizeWord()));
             }
 
             return query;
@@ -96,7 +96,7 @@ namespace milktea_server.Repositories
 
         public async Task<(List<Customer>, int)> GetAllCustomers(BaseQueryObject queryObject)
         {
-            var query = _dbContext.Customers.AsQueryable();
+            var query = _dbContext.Customers.Include(cus => cus.Account).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(queryObject.Filter))
             {

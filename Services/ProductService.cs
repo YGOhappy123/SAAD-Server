@@ -54,8 +54,8 @@ namespace milktea_server.Services
 
         public async Task<ServiceResponse> CreateNewCategory(CreateUpdateCategoryDto createCategoryDto)
         {
-            var categoryWithSameName = await _categoryRepo.GetCategoryByName(createCategoryDto.NameVi, createCategoryDto.NameEn);
-            if (categoryWithSameName != null)
+            var categoriesWithSameName = await _categoryRepo.GetCategoriesByName(createCategoryDto.NameVi, createCategoryDto.NameEn);
+            if (categoriesWithSameName != null && categoriesWithSameName.Count > 0)
             {
                 return new ServiceResponse
                 {
@@ -93,8 +93,8 @@ namespace milktea_server.Services
                 };
             }
 
-            var categoryWithSameName = await _categoryRepo.GetCategoryByName(updateCategoryDto.NameVi, updateCategoryDto.NameEn);
-            if (categoryWithSameName != null && categoryWithSameName.Id != categoryId)
+            var categoriesWithSameName = await _categoryRepo.GetCategoriesByName(updateCategoryDto.NameVi, updateCategoryDto.NameEn);
+            if (categoriesWithSameName != null && categoriesWithSameName.Where(c => c.Id != categoryId).ToList().Count > 0)
             {
                 return new ServiceResponse
                 {
@@ -143,7 +143,7 @@ namespace milktea_server.Services
             {
                 Status = ResStatusCode.OK,
                 Success = true,
-                Message = newStatus ? SuccessMessage.ENABLE_CATEGORY_SUCCESSFULLY : SuccessMessage.DISABLE_CATEGORY_SUCCESSFULLY,
+                Message = newStatus ? SuccessMessage.SHOW_IN_MENU_SUCCESS : SuccessMessage.HIDE_FROM_MENU_SUCCESS,
             };
         }
 
@@ -226,8 +226,8 @@ namespace milktea_server.Services
 
         public async Task<ServiceResponse> CreateNewMilktea(CreateUpdateMilkteaDto createMilkteaDto)
         {
-            var milkteaWithSameName = await _milkteaRepo.GetMilkteaByName(createMilkteaDto.NameVi, createMilkteaDto.NameEn);
-            if (milkteaWithSameName != null)
+            var milkteasWithSameName = await _milkteaRepo.GetMilkteasByName(createMilkteaDto.NameVi, createMilkteaDto.NameEn);
+            if (milkteasWithSameName != null && milkteasWithSameName.Count > 0)
             {
                 return new ServiceResponse
                 {
@@ -272,8 +272,8 @@ namespace milktea_server.Services
                 };
             }
 
-            var milkteaWithSameName = await _milkteaRepo.GetMilkteaByName(updateMilkteaDto.NameVi, updateMilkteaDto.NameEn);
-            if (milkteaWithSameName != null && milkteaWithSameName.Id != milkteaId)
+            var milkteasWithSameName = await _milkteaRepo.GetMilkteasByName(updateMilkteaDto.NameVi, updateMilkteaDto.NameEn);
+            if (milkteasWithSameName != null && milkteasWithSameName.Where(mt => mt.Id != milkteaId).ToList().Count > 0)
             {
                 return new ServiceResponse
                 {
@@ -330,7 +330,7 @@ namespace milktea_server.Services
             {
                 Status = ResStatusCode.OK,
                 Success = true,
-                Message = newStatus ? SuccessMessage.ENABLE_PRODUCT_SUCCESSFULLY : SuccessMessage.DISABLE_PRODUCT_SUCCESSFULLY,
+                Message = newStatus ? SuccessMessage.SHOW_IN_MENU_SUCCESS : SuccessMessage.HIDE_FROM_MENU_SUCCESS,
             };
         }
 
@@ -350,8 +350,8 @@ namespace milktea_server.Services
 
         public async Task<ServiceResponse> CreateNewTopping(CreateUpdateToppingDto createToppingDto)
         {
-            var toppingWithSameName = await _toppingRepo.GetToppingByName(createToppingDto.NameVi, createToppingDto.NameEn);
-            if (toppingWithSameName != null)
+            var toppingsWithSameName = await _toppingRepo.GetToppingsByName(createToppingDto.NameVi, createToppingDto.NameEn);
+            if (toppingsWithSameName != null && toppingsWithSameName.Count > 0)
             {
                 return new ServiceResponse
                 {
@@ -393,8 +393,8 @@ namespace milktea_server.Services
                 };
             }
 
-            var toppingWithSameName = await _toppingRepo.GetToppingByName(updateToppingDto.NameVi, updateToppingDto.NameEn);
-            if (toppingWithSameName != null && toppingWithSameName.Id != toppingId)
+            var toppingsWithSameName = await _toppingRepo.GetToppingsByName(updateToppingDto.NameVi, updateToppingDto.NameEn);
+            if (toppingsWithSameName != null && toppingsWithSameName.Where(tp => tp.Id != toppingId).ToList().Count > 0)
             {
                 return new ServiceResponse
                 {
@@ -448,7 +448,7 @@ namespace milktea_server.Services
             {
                 Status = ResStatusCode.OK,
                 Success = true,
-                Message = newStatus ? SuccessMessage.ENABLE_PRODUCT_SUCCESSFULLY : SuccessMessage.DISABLE_PRODUCT_SUCCESSFULLY,
+                Message = newStatus ? SuccessMessage.SHOW_IN_MENU_SUCCESS : SuccessMessage.HIDE_FROM_MENU_SUCCESS,
             };
         }
     }

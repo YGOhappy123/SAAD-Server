@@ -11,7 +11,7 @@ namespace milktea_server.Interfaces.Repositories
     {
         Task<(List<Topping>, int)> GetAllToppings(BaseQueryObject queryObject);
         Task<Topping?> GetToppingById(int toppingId);
-        Task<Topping?> GetToppingByName(string nameVi, string nameEn);
+        Task<List<Topping>> GetToppingsByName(string nameVi, string nameEn);
         Task AddTopping(Topping topping);
         Task UpdateTopping(Topping topping);
     }
