@@ -248,6 +248,7 @@ namespace milktea_server.Services
                 PriceM = createMilkteaDto?.PriceM,
                 PriceL = createMilkteaDto?.PriceL,
                 Image = createMilkteaDto?.Image,
+                IsAvailable = createMilkteaDto?.IsAvailable ?? false,
             };
             await _milkteaRepo.AddMilktea(newMilktea);
 
@@ -369,6 +370,7 @@ namespace milktea_server.Services
                 DescriptionEn = createToppingDto.DescriptionEn,
                 Price = createToppingDto.Price,
                 Image = createToppingDto?.Image,
+                IsAvailable = createToppingDto?.IsAvailable ?? false,
             };
             await _toppingRepo.AddTopping(newTopping);
 

@@ -25,6 +25,6 @@ namespace milktea_server.Dtos.Product
         public decimal? PriceM { get; set; }
         public decimal? PriceL { get; set; }
         public int CategoryId { get; set; }
-        public bool IsAvailable { get; set; } = true;
+        public bool? IsAvailable { get; set; } = true;
     }
 }
